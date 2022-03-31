@@ -1,11 +1,12 @@
+import express, { Request, Response } from 'express';
 const db = require('../db')
 
 class UserController {
-    async getUsers(req, res) {
+    async getUsers(req : Request, res: Response) {
         const users = await db.query('SELECT * FROM user_info')
         res.json(users.rows);
     }
-    async getUserInfo(req, res) {
+    async getUserInfo(req : Request, res: Response) {
         const id = req.params.id
         const user = await db.query(`
                 SELECT a.id, a.email, c.username, c.type AS user_type, c.birthday,
