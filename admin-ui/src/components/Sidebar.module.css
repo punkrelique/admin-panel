@@ -1,0 +1,20 @@
+*{
+    text-align: center;
+}
+
+.button{
+    height: 50px;
+}
+
+.link{
+    text-decoration: none;
+    color: black;
+    width: 240px;
+    height: 3em;
+}
+
+
+
+.link:active{
+    color: black;
+}
