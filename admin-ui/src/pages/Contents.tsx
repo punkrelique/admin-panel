@@ -1,12 +1,14 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import '../App.css'
+import Searchbar from "../components/Searchbar";
 
 const Contents = () => {
     return (
-        <Box className='Main'>
+        <div>
+            <Searchbar/>
             <h1>Contents</h1>
-        </Box>
+        </div>
     );
 };
 

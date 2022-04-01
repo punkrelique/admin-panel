@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Home from "./pages/Home";
 import Contents from "./pages/Contents";
+import Searchbar from "./components/Searchbar";
 
 function App() {
   return (
@@ -11,12 +12,10 @@ function App() {
         <div className="App">
           <Sidebar/>
             <Routes>
-            <Route path="/Users" element={<Home/>}/>
-            <Route path="/Contents" element={<Contents/>}/>
-
+                <Route path="/Users" element={<Home/>}/>
+                <Route path="/Contents" element={<Contents/>}/>
             </Routes>
         </div>
-
       </BrowserRouter>
   );
 }
