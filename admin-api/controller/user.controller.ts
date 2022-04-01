@@ -4,23 +4,18 @@ const db = require('../db')
 class UserController {
     async getUsers(req: Request, res: Response) {
         try {
-            const userType = req.params.userType
-            if (!userType) {
-                let users = await db.query(`
-                    SELECT id, email
-                    FROM user_info`
-                )
-                res.json(users.rows);
-            }
-            else {
-                let users = await db.query(`
-                SELECT id, email
-                FROM user_info
-                JOIN profile on user_info.id = profile.user_id
-                WHERE type = $1`,
-                    [userType])
-                res.json(users.rows);
-            }
+            const offset = req.query.offset ?? 0,
+                  limit = req.query.limit ?? 10,
+                  userType = req.query.userType
+            let query = `
+                        SELECT id, email
+                        FROM user_info
+                        JOIN profile ON user_info.id = profile.user_id `
+            if (userType)
+                query += `WHERE type = '${userType}' `
+            query += `OFFSET ${offset} LIMIT ${limit} `
+            const users = await db.query(query)
+            res.json(users.rows);
         }
         catch (e) {
             res.status(400).send({
@@ -51,12 +46,25 @@ class UserController {
 
     async getUsersByEmail(req: Request, res: Response) {
         try {
-            const email = req.params.email
-            const users = await db.query(`
+            const offset = req.query.offset ?? 0,
+                limit = req.query.limit ?? 10,
+                userType = req.query.userType,
+                email = req.params.email
+
+            let query = `
                 SELECT id, email
-                FROM user_info
-                WHERE email ~* ('.*' || $1 || '.*')`,
-                [email])
+                FROM user_info as a `
+            if (userType)
+                query += ` 
+                    JOIN profile as b ON a.id = b.user_id
+                    WHERE email ~* ('.*' || '${email}' || '.*') 
+                        AND b.type = '${userType}' `
+            else {
+                query += `WHERE email ~* ('.*' || '${email}' || '.*')`
+            }
+
+            query += ` OFFSET ${offset} LIMIT ${limit}`
+            const users = await db.query(query)
             res.json(users.rows)
         }
         catch (e) {

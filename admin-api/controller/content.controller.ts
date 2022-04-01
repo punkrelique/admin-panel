@@ -1,18 +1,18 @@
 import express, { Request, Response } from 'express';
 class ContentController {
-    async getContents(req: Response, res: Request) {
+    async getContent(req: Response, res: Request) {
 
     }
 
-    async getContentInfo(req: Response, res: Request) {
+    async getContentByID(req: Response, res: Request) {
 
     }
 
-    async updateContentInfo(req: Response, res: Request) {
+    async updateContentByID(req: Response, res: Request) {
 
     }
 
-    async deleteContent(req: Response, res: Request) {
+    async deleteContentByID(req: Response, res: Request) {
 
     }
 

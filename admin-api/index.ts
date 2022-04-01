@@ -6,4 +6,4 @@ const app = express()
 app.use(express.json());
 app.use('/api', userRouter)
 
-app.listen(PORT, () => console.log(`Ыerver started on ${PORT}`))
+app.listen(PORT, () => console.log(`Server started on ${PORT}`))
