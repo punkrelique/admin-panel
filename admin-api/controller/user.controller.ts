@@ -2,11 +2,18 @@ import express, { Request, Response } from 'express';
 const db = require('../db')
 
 class UserController {
-    async getUsers(req : Request, res: Response) {
-        const users = await db.query('SELECT * FROM user_info')
+    async getUsers(req: Request, res: Response) {
+        const userType = req.params.userType
+        const users = await db.query(`
+                SELECT id, email
+                FROM user_info
+                JOIN profile on user_info.id = profile.user_id
+                WHERE type = $1`,
+            [userType])
         res.json(users.rows);
     }
-    async getUserInfo(req : Request, res: Response) {
+
+    async getUserByID(req: Request, res: Response) {
         const id = req.params.id
         const user = await db.query(`
                 SELECT a.id, a.email, c.username, c.type AS user_type, c.birthday,
@@ -17,6 +24,16 @@ class UserController {
                 WHERE a.id = $1;`,
             [id])
         res.json(user.rows[0])
+    }
+
+    async getUsersByEmail(req: Request, res: Response) {
+        const email = req.params.email
+        const users = await db.query(`
+                SELECT id, email
+                FROM user_info
+                WHERE email ~* ('.*' || $1 || '.*')`,
+            [email])
+        res.json(users.rows)
     }
 }
 
