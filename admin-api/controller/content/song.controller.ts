@@ -2,12 +2,12 @@ import { Request, Response } from 'express';
 const db = require('../../db')
 
 class PlaylistController {
-    async getPlaylists(req: Request, res: Response) {
+    async getSongs(req: Request, res: Response) {
         try {
             const offset = req.query.offset ?? 0,
                 limit = req.query.limit ?? 10
             const content = await db.query(`
-                SELECT * FROM playlist
+                SELECT * FROM song
                 OFFSET $1 LIMIT $2
                 `, [offset, limit])
             res.json(content.rows);
@@ -19,12 +19,12 @@ class PlaylistController {
         }
     }
 
-    async getPlaylistByID(req: Request, res: Response) {
+    async getSongByID(req: Request, res: Response) {
         try {
             const id = req.params.id
             const content = await db.query(`
-                SELECT *
-                FROM playlist
+                SELECT id, name
+                FROM song
                 WHERE id = $1
             `, [id])
             res.json(content.rows);
@@ -36,25 +36,7 @@ class PlaylistController {
         }
     }
 
-    async updatePlaylist(req: Request, res: Response) {
-        try {
-            const { id, title, type, source } = req.body
-            const song = await db.query(`
-                UPDATE playlist
-                SET title = $1, type = $2, img_src = $3
-                WHERE id = $4
-                RETURNING *
-            `, [title, type, source, id])
-            res.json(song.rows);
-        }
-        catch (e) {
-            res.status(400).send({
-                message: e.message
-            });
-        }
-    }
-
-    async deletePlaylistByID(req: Request, res: Response) {
+    async deleteSongByID(req: Request, res: Response) {
         try {
             const id = req.params.id
             const content = await db.query(`
@@ -72,8 +54,38 @@ class PlaylistController {
         }
     }
 
-    async addPlaylist(req: Request, res: Response) {
-        // USER_ID нужен => TODO: сделать авторизацию.
+    async addSong(req: Request, res: Response) {
+        try {
+            const { title, type } = req.body // USER_ID нужен => TODO: сделать авторизацию.
+            const content = await db.query(`
+                INSERT INTO playlist
+                ( title, type ) VALUES
+                RETURNING *
+            `)
+            res.json(content.rows);
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
+    }
+
+    async updateSong(req: Request, res: Response) {
+        try {
+            const { title, name, source } = req.body
+            const song = await db.query(`
+                UPDATE song
+                SET title = ${title}, name = ${name}, source = ${source}
+                RETURNING *
+            `)
+            res.json(song.rows[0]);
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
     }
 }
 
