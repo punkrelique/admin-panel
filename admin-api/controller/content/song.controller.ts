@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+const jwt = require('jsonwebtoken')
+const { secret } = require('../../config')
 const db = require('../../db')
 
 class PlaylistController {
@@ -56,13 +58,14 @@ class PlaylistController {
 
     async addSong(req: Request, res: Response) {
         try {
-            const { title, type } = req.body // USER_ID нужен => TODO: сделать авторизацию.
+            const { userId, name, src } = req.body;
             const content = await db.query(`
-                INSERT INTO playlist
-                ( title, type ) VALUES
+                INSERT INTO song
+                (name, user_id, source)
+                VALUES ($1, $2, $3)
                 RETURNING *
-            `)
-            res.json(content.rows);
+            `, [name, userId, src])
+            res.json(content.rows[0]);
         }
         catch (e) {
             res.status(400).send({
@@ -79,6 +82,24 @@ class PlaylistController {
                 SET title = ${title}, name = ${name}, source = ${source}
                 RETURNING *
             `)
+            res.json(song.rows[0]);
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
+    }
+
+    async addSongToPlaylistByID(req: Request, res: Response) {
+        try {
+            const { idS, idP } = req.params
+            const song = await db.query(`
+                INSERT
+                INTO playlist_song (playlist_id, song_id)
+                VALUES ($1, $2)
+                RETURNING *
+            `, [idP, idS])
             res.json(song.rows[0]);
         }
         catch (e) {

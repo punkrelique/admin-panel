@@ -8,8 +8,8 @@ const PORT = process.env.PORT || 8080
 
 const app = express()
 app.use(express.json());
-app.use('/api', authMiddleware, userRouter)
+app.use('/api/user',authMiddleware, userRouter)
 app.use('/api/content', authMiddleware, contentRouter)
-app.use('/api/auth', authMiddleware, authRouter)
+app.use('/api/auth', authRouter)
 
 app.listen(PORT, () => console.log(`Server started on ${PORT}`))

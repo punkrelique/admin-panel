@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 const db = require('../../db')
+const jwt = require('jsonwebtoken')
+const { secret } = require('../../config')
 
 class PlaylistController {
     async getPlaylists(req: Request, res: Response) {
@@ -73,7 +75,59 @@ class PlaylistController {
     }
 
     async addPlaylist(req: Request, res: Response) {
-        // USER_ID нужен => TODO: сделать авторизацию.
+        try {
+            const token = req.headers.authorization?.split(' ')[1]
+            const userId = jwt.verify(token, secret)['id']
+            const { title, type, img_src, user_id } = req.body;
+            const content = await db.query(`
+                INSERT INTO playlist
+                (title, user_id, type, img_src)
+                VALUES ($1, $2, $3, $4)
+                RETURNING *
+            `, [title, user_id ?? userId, type, img_src])
+            res.json(content.rows);
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
+    }
+
+    async getSongsFromPlaylistByID(req: Request, res: Response) {
+        try {
+            const id = req.params.id
+            const content = await db.query(`
+                SELECT a.id, a.name
+                FROM song as a
+                JOIN playlist_song as b on a.id = b.song_id
+                WHERE playlist_id = $1
+            `, [id])
+            res.json(content.rows);
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
+    }
+
+    async removeSongFromPlaylistByID(req: Request, res: Response) {
+        try {
+            const { idS, idP } = req.params
+            const song = await db.query(`
+                DELETE
+                FROM playlist_song
+                WHERE playlist_id = $1 AND song_id = $2
+                RETURNING *
+            `, [idP, idS])
+            res.json(song.rows[0]);
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
     }
 }
 
