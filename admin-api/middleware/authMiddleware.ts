@@ -15,7 +15,14 @@ module.exports = function (req: RequestExtension, res: Response, next: NextFunct
             return res.status(403).json({
                 message: "Unauthorized"
             })
+
         const data = jwt.verify(token, secret)
+
+        if (data['role'] !== 'admin')
+            return res.status(403).json({
+                message: "Insufficient permissions"
+            })
+
         req.user = data;
         next()
     }

@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 const db = require('../db')
 
 class UserController {
@@ -12,9 +12,10 @@ class UserController {
                         FROM user_info
                         JOIN profile ON user_info.id = profile.user_id `
             if (userType)
-                query += `WHERE type = '${userType}' `
-            query += `OFFSET ${offset} LIMIT ${limit} `
-            const users = await db.query(query)
+                query += `WHERE type = ${db.escape(userType)} `
+
+            query += `OFFSET $1 LIMIT $2 `
+            const users = await db.query(query, [offset, limit])
             res.json(users.rows);
         }
         catch (e) {
@@ -54,17 +55,18 @@ class UserController {
             let query = `
                 SELECT id, email
                 FROM user_info as a `
+
             if (userType)
                 query += ` 
                     JOIN profile as b ON a.id = b.user_id
-                    WHERE email ~* ('.*' || '${email}' || '.*') 
-                        AND b.type = '${userType}' `
+                    WHERE email ~* ('.*' || '${db.escape(email)}' || '.*') 
+                    AND b.type = '${db.escape(userType)}' `
             else {
-                query += `WHERE email ~* ('.*' || '${email}' || '.*')`
+                query += `WHERE email ~* ('.*' || '${db.escape(email)}' || '.*')`
             }
 
-            query += ` OFFSET ${offset} LIMIT ${limit}`
-            const users = await db.query(query)
+            query += ` OFFSET $1 LIMIT $2`
+            const users = await db.query(query, [offset, limit])
             res.json(users.rows)
         }
         catch (e) {

@@ -1,8 +1,8 @@
 export {}
 const Router = require('express');
 const router = new Router();
-const playlistController = require('../controller/content/playlist.controller');
-const songController = require('../controller/content/song.controller')
+const playlistController = require('../controllers/content/playlist.controller');
+const songController = require('../controllers/content/song.controller')
 
 router.get('/playlist', playlistController.getPlaylists)
 router.get('/playlist/:id', playlistController.getPlaylistByID)

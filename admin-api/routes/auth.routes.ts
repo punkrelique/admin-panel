@@ -1,7 +1,7 @@
 export {}
 const Router = require('express');
 const router = new Router();
-const authController = require('../controller/auth.controller');
+const authController = require('../controllers/auth.controller');
 
 router.get('/', authController.login)
 
