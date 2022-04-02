@@ -2,21 +2,76 @@ import express, { Request, Response } from 'express';
 const db = require('../db')
 
 class UserController {
-    async getUsers(req : Request, res: Response) {
-        const users = await db.query('SELECT * FROM user_info')
-        res.json(users.rows);
+    async getUsers(req: Request, res: Response) {
+        try {
+            const offset = req.query.offset ?? 0,
+                  limit = req.query.limit ?? 10,
+                  userType = req.query.userType
+            let query = `
+                        SELECT id, email
+                        FROM user_info
+                        JOIN profile ON user_info.id = profile.user_id `
+            if (userType)
+                query += `WHERE type = '${userType}' `
+            query += `OFFSET ${offset} LIMIT ${limit} `
+            const users = await db.query(query)
+            res.json(users.rows);
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
     }
-    async getUserInfo(req : Request, res: Response) {
-        const id = req.params.id
-        const user = await db.query(`
+
+    async getUserByID(req: Request, res: Response) {
+        try {
+            const id = req.params.id
+            const user = await db.query(`
                 SELECT a.id, a.email, c.username, c.type AS user_type, c.birthday,
                     c.country, b.type as premium_type, b.start_at, b.end_at
                 FROM user_info AS a
                 JOIN premium as b on a.id = b.user_id
                 JOIN profile as c on a.id = c.user_id
                 WHERE a.id = $1;`,
-            [id])
-        res.json(user.rows[0])
+                [id])
+            res.json(user.rows[0])
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
+    }
+
+    async getUsersByEmail(req: Request, res: Response) {
+        try {
+            const offset = req.query.offset ?? 0,
+                limit = req.query.limit ?? 10,
+                userType = req.query.userType,
+                email = req.params.email
+
+            let query = `
+                SELECT id, email
+                FROM user_info as a `
+            if (userType)
+                query += ` 
+                    JOIN profile as b ON a.id = b.user_id
+                    WHERE email ~* ('.*' || '${email}' || '.*') 
+                        AND b.type = '${userType}' `
+            else {
+                query += `WHERE email ~* ('.*' || '${email}' || '.*')`
+            }
+
+            query += ` OFFSET ${offset} LIMIT ${limit}`
+            const users = await db.query(query)
+            res.json(users.rows)
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
     }
 }
 
