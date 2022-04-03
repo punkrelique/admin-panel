@@ -1,9 +1,11 @@
 *{
     text-align: center;
+
 }
 
 .button{
-    height: 50px;
+    height: 200px;
+    overflow: hidden;
 }
 
 .link{
@@ -11,9 +13,8 @@
     color: black;
     width: 240px;
     height: 3em;
+
 }
-
-
 
 .link:active{
     color: black;
