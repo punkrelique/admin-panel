@@ -108,6 +108,26 @@ class PlaylistController {
             });
         }
     }
+
+    async getSongsByName(req: Request, res: Response) {
+        try {
+            const offset = req.query.offset ?? 0,
+                limit = req.query.limit ?? 10,
+                title = req.params.title
+
+            const users = await db.query(`
+                SELECT id, name
+                FROM song
+                WHERE name ~* ('.*' || $1 || '.*')
+                OFFSET $2 LIMIT $3`, [title, offset, limit])
+            res.json(users.rows)
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
+    }
 }
 
 module.exports = new PlaylistController();
