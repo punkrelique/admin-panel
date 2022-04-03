@@ -9,7 +9,8 @@ class PlaylistController {
             const offset = req.query.offset ?? 0,
                 limit = req.query.limit ?? 10
             const content = await db.query(`
-                SELECT * FROM playlist
+                SELECT id, title, type
+                FROM playlist
                 OFFSET $1 LIMIT $2
                 `, [offset, limit])
             res.json(content.rows);
@@ -122,6 +123,26 @@ class PlaylistController {
                 RETURNING *
             `, [idP, idS])
             res.json(song.rows[0]);
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
+    }
+
+    async getPlaylistsByTitle(req: Request, res: Response) {
+        try {
+            const offset = req.query.offset ?? 0,
+                limit = req.query.limit ?? 10,
+                title = req.params.title
+
+            const users = await db.query(`
+                SELECT id, title, type
+                FROM playlist
+                WHERE title ~* ('.*' || $1 || '.*')
+                OFFSET $2 LIMIT $3`, [title, offset, limit])
+            res.json(users.rows)
         }
         catch (e) {
             res.status(400).send({
