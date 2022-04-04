@@ -3,11 +3,21 @@ const jwt = require('jsonwebtoken')
 const { secret } = require('../../config')
 const db = require('../../db')
 
-class PlaylistController {
+class SongController {
     async getSongs(req: Request, res: Response) {
         try {
-            const offset = req.query.offset ?? 0,
-                limit = req.query.limit ?? 10
+            const offset = req.query.offset,
+                limit = req.query.limit
+
+            if (!offset)
+                res.status(400).send({
+                    message: "Offset query param is missing"
+                })
+            if (!limit)
+                res.status(400).send({
+                    message: "Limit query param is missing"
+                })
+
             const content = await db.query(`
                 SELECT * FROM song
                 OFFSET $1 LIMIT $2
@@ -111,15 +121,24 @@ class PlaylistController {
 
     async getSongsByName(req: Request, res: Response) {
         try {
-            const offset = req.query.offset ?? 0,
-                limit = req.query.limit ?? 10,
-                title = req.params.title
+            const offset = req.query.offset,
+                limit = req.query.limit,
+                name = req.params.name
+
+            if (!offset)
+                res.status(400).send({
+                    message: "Offset query param is missing"
+                })
+            if (!limit)
+                res.status(400).send({
+                    message: "Limit query param is missing"
+                })
 
             const users = await db.query(`
                 SELECT id, name
                 FROM song
                 WHERE name ~* ('.*' || $1 || '.*')
-                OFFSET $2 LIMIT $3`, [title, offset, limit])
+                OFFSET $2 LIMIT $3`, [name, offset, limit])
             res.json(users.rows)
         }
         catch (e) {
@@ -130,4 +149,4 @@ class PlaylistController {
     }
 }
 
-module.exports = new PlaylistController();
+module.exports = new SongController();

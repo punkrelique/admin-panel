@@ -78,7 +78,15 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "int"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "int"
             }
           },
           {
@@ -790,11 +798,36 @@
         "summary": "Get users matching the given email",
         "parameters": [
           {
+            "name": "offset",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "int"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "int"
+            }
+          },
+          {
+            "name": "usertype",
+            "description": "admin, user or artist",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "email",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],

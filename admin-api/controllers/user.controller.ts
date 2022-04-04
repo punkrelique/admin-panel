@@ -4,9 +4,19 @@ const db = require('../db')
 class UserController {
     async getUsers(req: Request, res: Response) {
         try {
-            const offset = req.query.offset ?? 0,
-                  limit = req.query.limit ?? 10,
+            const offset = req.query.offset,
+                  limit = req.query.limit,
                   userType = req.query.userType
+
+            if (!offset)
+                res.status(400).send({
+                    message: "Offset query param is missing"
+                })
+            if (!limit)
+                res.status(400).send({
+                    message: "Limit query param is missing"
+                })
+
             let query = `
                         SELECT id, email
                         FROM user_info
@@ -47,10 +57,19 @@ class UserController {
 
     async getUsersByEmail(req: Request, res: Response) {
         try {
-            const offset = req.query.offset ?? 0,
-                limit = req.query.limit ?? 10,
+            const offset = req.query.offset,
+                limit = req.query.limit,
                 userType = req.query.userType,
                 email = req.params.email
+
+            if (!offset)
+                res.status(400).send({
+                    message: "Offset query param is missing"
+                })
+            if (!limit)
+                res.status(400).send({
+                    message: "Limit query param is missing"
+                })
 
             let query = `
                 SELECT id, email

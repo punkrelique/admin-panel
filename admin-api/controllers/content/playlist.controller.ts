@@ -6,11 +6,19 @@ const { secret } = require('../../config')
 class PlaylistController {
     async getPlaylists(req: Request, res: Response) {
         try {
-            const offset = req.query.offset ?? 0,
-                limit = req.query.limit ?? 10
+            const offset = req.query.offset,
+                limit = req.query.limit
+
+            if (!offset)
+                res.status(400).send({
+                    message: "Offset query param is missing"
+                })
+            if (!limit)
+                res.status(400).send({
+                    message: "Limit query param is missing"
+                })
             const content = await db.query(`
-                SELECT id, title, type
-                FROM playlist
+                SELECT * FROM playlist
                 OFFSET $1 LIMIT $2
                 `, [offset, limit])
             res.json(content.rows);
@@ -97,7 +105,19 @@ class PlaylistController {
 
     async getSongsFromPlaylistByID(req: Request, res: Response) {
         try {
-            const id = req.params.id
+            const id = req.params.id,
+                offset = req.query.offset,
+                limit = req.query.limit
+
+            if (!offset)
+                res.status(400).send({
+                    message: "Offset query param is missing"
+                })
+            if (!limit)
+                res.status(400).send({
+                    message: "Limit query param is missing"
+                })
+
             const content = await db.query(`
                 SELECT a.id, a.name
                 FROM song as a
@@ -133,9 +153,18 @@ class PlaylistController {
 
     async getPlaylistsByTitle(req: Request, res: Response) {
         try {
-            const offset = req.query.offset ?? 0,
-                limit = req.query.limit ?? 10,
+            const offset = req.query.offset,
+                limit = req.query.limit,
                 title = req.params.title
+
+            if (!offset)
+                res.status(400).send({
+                    message: "Offset query param is missing"
+                })
+            if (!limit)
+                res.status(400).send({
+                    message: "Limit query param is missing"
+                })
 
             const users = await db.query(`
                 SELECT id, title, type
