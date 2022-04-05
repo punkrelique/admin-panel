@@ -17,7 +17,6 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     '& .MuiToggleButtonGroup-grouped': {
         margin: theme.spacing(0.5),
         border: 0,
-        width: drawerWidth,
         '&.Mui-disabled': {
             border: 0,
         },
@@ -60,6 +59,7 @@ const Sidebar = () => {
                                 exclusive
                                 onChange={handleChange}
                                 aria-label="text alignment"
+                                className={styles.btnGroup}
                             >
                                 `<ToggleButton sx={{p: 0, height: 50}} value="top" aria-label="top aligned">
                                     <Link className={styles.link} to="/Users">
