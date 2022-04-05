@@ -3,12 +3,12 @@ import {MenuItem, Select} from "@mui/material";
 import {FormControl} from "@mui/material";
 
 export type Props ={
-    searchSelect?: string;
-    handleChange?: (event: any) => void;
+    value?: string;
+    onChange?: (event: any) => void;
     options: string[];
 }
 
-const TypeSelect: React.FC<Props> = ({searchSelect,handleChange, options} ) => {
+const SelectType: React.FC<Props> = ({value,onChange, options} ) => {
 
     const setOptions = options.map((type) => {
         return(
@@ -20,8 +20,8 @@ const TypeSelect: React.FC<Props> = ({searchSelect,handleChange, options} ) => {
             <Select
                 labelId="demo-simple-select-standard-label"
                 id="demo-simple-select-standard"
-                value={searchSelect}
-                onChange={handleChange}
+                value={value}
+                onChange={onChange}
                 label="Role"
             >
                 {setOptions}
@@ -30,4 +30,4 @@ const TypeSelect: React.FC<Props> = ({searchSelect,handleChange, options} ) => {
     );
 };
 
-export default TypeSelect;
+export default SelectType;

@@ -2,6 +2,7 @@ import React from 'react';
 import SearchIcon from "@mui/icons-material/Search";
 import {alpha, createTheme, styled} from "@mui/material/styles";
 import {grey} from "@mui/material/colors";
+import {Input} from "@mui/material";
 
 const mytheme = createTheme({
     palette: {
@@ -17,6 +18,7 @@ const mytheme = createTheme({
 const StyledSearch = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
+
     backgroundColor: alpha(mytheme.palette.primary.main, 0.15),
     '&:hover': {
         backgroundColor: alpha(theme.palette.common.white, 0.25),
@@ -40,38 +42,34 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
-const StyledInputBase = styled('input')(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: '20ch',
-        },
-    },
-}));
-
 type Props ={
-    input: string;
+    value: string;
     onChange: (event: any) => void;
-    searchType: (event: any) => void;
+    onSearch: (event: any) => void;
 }
 
-const Search:React.FC<Props> = ({input, onChange, searchType}) => {
+const Search:React.FC<Props> = ({value, onChange, onSearch}) => {
+    const onEnter = (event: any) =>{
+        if (event.key === 'Enter' && value[0] !== '') {
+            onSearch(event);
+        }
+    }
+
     return (
         <StyledSearch>
             <SearchIconWrapper>
                 <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase
+            {/*<StyledInputBase
                 placeholder="Search…"
-                onKeyDown={searchType }
-                value={input}
+                onKeyDown={onEnter}
+                value={value}
                 onChange={onChange}
+            />*/}
+            <Input placeholder="Search"
+                   onKeyDown={onEnter}
+                   value={value}
+                   onChange={onChange}
             />
         </StyledSearch>
     );

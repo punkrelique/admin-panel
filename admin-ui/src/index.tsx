@@ -2,8 +2,8 @@ import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import App from "./App";
-import Home from "./pages/Home";
-import Contents from "./pages/Contents";
+import Users from "./pages/Users";
+import Content from "./pages/Content";
 import Sidebar from "./components/Sidebar";
 
 const rootElement = document.getElementById("root")!;
@@ -16,8 +16,8 @@ root.render(
             <Sidebar/>
             <Routes>
                 <Route path="/" element={<App />}/>
-                <Route path="/Users" element={<Home/>}/>
-                <Route path="/Contents" element={<Contents/>}/>
+                <Route path="/Users" element={<Users/>}/>
+                <Route path="/Contents" element={<Content/>}/>
             </Routes>
         </BrowserRouter>
     </StrictMode>
