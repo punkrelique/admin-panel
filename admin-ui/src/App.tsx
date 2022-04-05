@@ -9,7 +9,6 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 
 function App() {
   return (
-      <BrowserRouter>
         <div className="App">
           <Sidebar/>
             <Routes>
@@ -21,8 +20,6 @@ function App() {
                 </Route>
             </Routes>
         </div>
-
-      </BrowserRouter>
   );
 }
 
