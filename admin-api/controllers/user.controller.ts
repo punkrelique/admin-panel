@@ -22,7 +22,7 @@ class UserController {
                         FROM user_info
                         JOIN profile ON user_info.id = profile.user_id `
             if (userType)
-                query += `WHERE type = ${db.escape(userType)} `
+                query += `WHERE type = ${userType} `
 
             query += `OFFSET $1 LIMIT $2 `
             const users = await db.query(query, [offset, limit])
@@ -77,11 +77,11 @@ class UserController {
 
             if (userType)
                 query += ` 
-                    JOIN profile as b ON a.id = b.user_id
-                    WHERE email ~* ('.*' || '${db.escape(email)}' || '.*') 
-                    AND b.type = '${db.escape(userType)}' `
+                    JOIN profile as b ON a.id = b.user_id 
+                    WHERE email ~* ('.*' || '${email}' || '.*')
+                    AND b.type = '${userType}' `
             else {
-                query += `WHERE email ~* ('.*' || '${db.escape(email)}' || '.*')`
+                query += `WHERE email ~* ('.*' || '${email}' || '.*')`
             }
 
             query += ` OFFSET $1 LIMIT $2`
