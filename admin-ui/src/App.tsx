@@ -10,7 +10,6 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 function App() {
   return (
         <div className="App">
-          <Sidebar/>
             <Routes>
                 <Route path="/Login" element={<Login/>}/>
                 <Route element={<ProtectedRoutes/>}>

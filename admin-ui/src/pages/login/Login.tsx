@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 import axios from "axios";
 
 const isLogged = (): boolean => {
-    return 0 === document.cookie.indexOf('name=');
+    return 0 === document.cookie.indexOf('SAT=');
 }
 
 const Login = () => {
@@ -23,7 +23,7 @@ const Login = () => {
         }).then(data => data)
             .then(res => {
                 setFetching(false);
-                document.cookie = `name=${res.data}; max-age=86400; path=/;`
+                document.cookie = `SAT=${res.data}; max-age=86400; path=/; secure; samesite=strict`
                 return res.data;
             }).catch(e => {
                 setFetching(false);
