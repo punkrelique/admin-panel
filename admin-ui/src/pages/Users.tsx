@@ -6,6 +6,7 @@ import {
     ListItem, ListItemButton, ListItemText, ListSubheader,
 } from "@mui/material";
 import {Link} from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 const url = 'http://localhost:8080/api/';
 let usersMock = [
@@ -67,6 +68,7 @@ const Users = () => {
 
     return (
         <div>
+            <Sidebar/>
             <Header
                 typeOptions={['user', 'artist']}
                 onSearch={userSearch}
