@@ -4,7 +4,8 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 
 import SelectType from "./SelectType";
-import Search from "./Search";
+import {InputAdornment, TextField} from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
 
 type Props ={
     typeOptions: string[];
@@ -22,27 +23,35 @@ const Header: React.FC<Props> =
     let [input, setInput] = inputState;
     let [type, setType] = typeState;
 
+    const onEnter = (event: any) =>{
+        if (event.key === 'Enter' && input !== '') {
+            onSearch(event);
+        }
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar color="inherit" position="static" sx={{paddingLeft: 30}}>
                 <Toolbar>
-                    <Search value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onSearch={onSearch}
+                    <TextField
+                        color={"primary"}
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={onEnter}
+                        variant={"standard"}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon/>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                     <SelectType value={type}
                                 onChange={(e) => setType(e.target.value)}
                                 options={typeOptions}
                     />
                     <Box sx={{ flexGrow: 1 }} />
-                    {/*<Button
-                        size="large"
-                        variant="contained"
-                        onClick={() => console.log('Add New')}
-                        color="inherit"
-                    >
-                        Add New
-                    </Button>*/}
                 </Toolbar>
             </AppBar>
         </Box>

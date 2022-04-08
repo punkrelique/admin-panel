@@ -16,7 +16,11 @@ const SelectType: React.FC<Props> = ({value,onChange, options} ) => {
         )});
 
     return (
-        <FormControl  variant="standard" sx={{ m: 0, minWidth: 120}}>
+        <FormControl
+            variant="standard"
+            sx={{ m: 0, minWidth: 120}}
+            color={"primary"}
+        >
             <Select
                 labelId="demo-simple-select-standard-label"
                 id="demo-simple-select-standard"

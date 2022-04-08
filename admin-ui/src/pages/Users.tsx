@@ -1,32 +1,11 @@
 import React from 'react';
-import '../App.css'
 import Header from "../components/Header";
-import {
-    List,
-    ListItem, ListItemButton, ListItemText, ListSubheader,
-} from "@mui/material";
+import { Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
 import {Link} from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import Button from "@mui/material/Button";
 
 const url = 'http://localhost:8080/api/';
-let usersMock = [
-    {
-        id : 1,
-        email: "denchik@gmail.ru"
-    },
-    {
-        id : 2,
-        email: "lolchik@gmail.ru"
-    },
-    {
-        id : 3,
-        email: "prikolchik@gmail.ru"
-    },
-    {
-        id : 4,
-        email: "menchik@gmail.ru"
-    },
-]
 
 
 interface user {
@@ -38,32 +17,47 @@ const Users = () => {
 
     const type = React.useState('user');
     const input = React.useState('');
+    const [users, setUsers] = React.useState<user[]>();
 
     const userSearch =(e: any) => {
-            fetch(url +'user/email/' + input[0])
+            fetch(url +'user/email/' + input[0] + '?offset=0' + '&limit=10' + '&usertype=' + type[0])
                 .then((response) =>{
                     if (response.ok) {
                         return response.json();
                     }
                 })
                 .then((json) =>{
-
+                    setUsers(json);
                 })
                 .catch((error) => {
                     console.log(error)
                 });
     };
 
-    let renderList = usersMock?.map((user) => {
+    let renderList = users?.map((user: user, index) => {
             return (
-                <ListItem key={user.id} component="div" disablePadding>
-                    <ListItem>
-                        <ListItemText primary={user.email} />
-                    </ListItem>
-                    <ListItemButton>
-                        <Link to={`/User/${user.id}`}>Details</Link>
-                    </ListItemButton>
-                </ListItem>
+                <TableRow>
+                    <TableCell sx={{width: 2}}>
+                        {index}
+                    </TableCell>
+                    <TableCell sx={{width: 3}}>
+                        {user.id}
+                    </TableCell>
+                    <TableCell>
+                        {user.email}
+                    </TableCell>
+                    <TableCell sx={{width: 2}}>
+                        <Link
+                            to={`/User/${user.id}`}
+                            style={{color: "grey", textDecoration: "none"}}
+                        >
+                            DETAILS
+                        </Link>
+                    </TableCell>
+                    <TableCell sx={{width: 2}}>
+                        <Button size={"small"} style={{color: "red", textDecoration: "none"}}>DELETE</Button>
+                    </TableCell>
+                </TableRow>
         )});
 
     return (
@@ -76,15 +70,18 @@ const Users = () => {
                 typeState={type}
             />
 
-            <List
-                sx={{paddingLeft: 30, maxWidth: 800}}
-                subheader={
-                      <ListSubheader component="div" id="nested-list-subheader">
-                          <h1>Users</h1>
-                      </ListSubheader>
-            }>
-                {renderList}
-            </List>
+            <Table sx={{ minWidth: 550, maxWidth: "calc(50% - 250px)", marginLeft: "250px" }} size="small" aria-label="a dense table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>№</TableCell>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Email</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {renderList}
+                </TableBody>
+            </Table>
         </div>
     );
 };
