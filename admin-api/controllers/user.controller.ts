@@ -39,8 +39,11 @@ class UserController {
         try {
             const id = req.params.id
             const user = await db.query(`
-                SELECT a.id, a.email, c.username, c.type AS user_type, c.birthday,
-                    c.country, b.type as premium_type, b.start_at, b.end_at
+                SELECT a.id, a.email, c.username, c.type AS user_type, 
+                    to_char(c.birthday :: DATE, 'Mon dd, yyyy') as birthday,
+                    c.country, b.type as premium_type, 
+                    to_char(b.start_at, 'Mon dd, yyyy HH12:MI:SS') as premium_started_at,
+                    to_char(b.end_at, 'Mon dd, yyyy HH12:MI:SS') as premium_ends_at
                 FROM user_info AS a
                 JOIN premium as b on a.id = b.user_id
                 JOIN profile as c on a.id = c.user_id
