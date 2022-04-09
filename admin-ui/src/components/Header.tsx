@@ -34,18 +34,19 @@ const Header: React.FC<Props> =
             <AppBar color="inherit" position="static" sx={{paddingLeft: 30}}>
                 <Toolbar>
                     <TextField
-                        color={"primary"}
+                        color={"secondary"}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={onEnter}
-                        variant={"standard"}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <SearchIcon/>
+                                    <SearchIcon sx={{m: 0}} />
                                 </InputAdornment>
                             ),
                         }}
+                        variant="standard"
+                        sx={{mr: 4}}
                     />
                     <SelectType value={type}
                                 onChange={(e) => setType(e.target.value)}
