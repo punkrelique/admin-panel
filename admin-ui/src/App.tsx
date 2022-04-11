@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import Sidebar from "./components/Sidebar";
+import React from 'react';
 import  { Route, Routes } from "react-router-dom";
 import Home from "./pages/Users";
 import Contents from "./pages/Content";
@@ -11,7 +10,7 @@ import {grey, red} from "@mui/material/colors";
 const appTheme = createTheme({
     palette: {
         secondary: {
-            main: grey[300]
+            main: grey[700]
         },
         error: {
             main: red[500]

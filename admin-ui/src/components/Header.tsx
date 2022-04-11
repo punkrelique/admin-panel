@@ -31,7 +31,7 @@ const Header: React.FC<Props> =
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar color="inherit" position="static" sx={{paddingLeft: 30}}>
+            <AppBar color="inherit" position="fixed" sx={{paddingLeft: 30}}>
                 <Toolbar>
                     <TextField
                         color={"secondary"}
