@@ -67,8 +67,8 @@ const Sidebar = () => {
                                     </Link>
                                 </ToggleButton>
                                 <ToggleButton sx={{p: 0, height: 50}} value="bottom" aria-label="bottom aligned">
-                                    <Link className={styles.link} to="/Contents">
-                                        <Typography variant={"inherit"} sx={{mt: 1}}>Contents</Typography>
+                                    <Link className={styles.link} to="/Content">
+                                        <Typography variant={"inherit"} sx={{mt: 1}}>Content</Typography>
                                     </Link>
                                 </ToggleButton>
                             </StyledToggleButtonGroup>

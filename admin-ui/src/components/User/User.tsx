@@ -5,7 +5,7 @@ import queryConfig from '../QueryConfig';
 import styled from "@emotion/styled";
 import Sidebar from "../Sidebar";
 import styles from './User.module.css'
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 
 interface IUserData {
@@ -18,9 +18,10 @@ interface IUserData {
     subscriptionEndL: string
 }
 
-const User: React.FC<{ id: number }> = (props) => {
+const User: React.FC = () => {
     const [user, setUser] = useState<IUserData>();
     const navigate = useNavigate();
+    const props = useParams();
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/user/id/${props.id}`, queryConfig)

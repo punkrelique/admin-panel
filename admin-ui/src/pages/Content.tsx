@@ -6,7 +6,7 @@ const Content = () => {
     return (
         <div>
             <Sidebar/>
-            <h1>Contents</h1>
+            <h1>Content</h1>
         </div>
     );
 };

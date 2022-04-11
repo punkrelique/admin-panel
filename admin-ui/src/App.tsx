@@ -6,6 +6,7 @@ import { Login } from './pages/login/Login'
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {grey, red} from "@mui/material/colors";
+import User from "./components/User/User";
 
 const appTheme = createTheme({
     palette: {
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/Users" element={<Home/>}/>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/Contents" element={<Contents/>}/>
+                    <Route path="/User/:id" element={<User/>}/>
                 </Route>
             </Routes>
         </div>
