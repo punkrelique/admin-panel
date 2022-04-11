@@ -166,13 +166,7 @@ const Users = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            { fetching?
-                                <TailSpin className="spinner"
-                                          stroke="#616161"
-                                          strokeWidth="4px"
-                                          width={30}
-                                          style={{margin: 0}}
-                            /> : renderList}
+                            { renderList}
                             <TableRow>
                                 <TableCell colSpan={4} >
                                     {loadMore}
