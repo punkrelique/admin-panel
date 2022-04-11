@@ -59,7 +59,7 @@ const Users = () => {
     const input = React.useState('');
     const [offset, setOffset] = React.useState<number>(0);
     const [users, setUsers] = React.useState<user[]>([]);
-    const [fetching, setFetching] = React.useState(false);
+    const [fetching, setFetching] = React.useState(true);
     const [received, setReceived] = React.useState(true);
 
     useEffect(() => {
@@ -75,7 +75,7 @@ const Users = () => {
             + input[0]
             + '?offset=' + offset
             + '&limit=15'
-            + '&usertype=' + type[0], {
+            + '&userType=' + type[0], {
             headers: {
                 'Authorization': `token ${getCookie('SAT')}`
             }
@@ -166,7 +166,13 @@ const Users = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {renderList}
+                            { fetching?
+                                <TailSpin className="spinner"
+                                          stroke="#616161"
+                                          strokeWidth="4px"
+                                          width={30}
+                                          style={{margin: 0}}
+                            /> : renderList}
                             <TableRow>
                                 <TableCell colSpan={4} >
                                     {loadMore}

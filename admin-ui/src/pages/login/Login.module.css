@@ -23,3 +23,8 @@ img {
 .login-btn {
     margin-top: 15px;
 }
+
+.spinner {
+    margin-left: 128px;
+    margin-top: 7px;
+}

@@ -67,13 +67,14 @@ const Login = () => {
                     />
                     {
                         fetching ?
-                        <TailSpin className="spinner" stroke="#678DA6" strokeWidth="3px"/> :
-                        <Button
-                            type="submit"
-                            color="primary"
-                            variant="outlined"
-                            disabled={fetching}
-                        >Login</Button>
+                            <TailSpin className={styles.spinner} stroke="#678DA6" strokeWidth="3px"/>
+                            :
+                            <Button
+                                type="submit"
+                                color="primary"
+                                variant="outlined"
+                                disabled={fetching}
+                            >Login</Button>
                     }
                 </form>
         </div>

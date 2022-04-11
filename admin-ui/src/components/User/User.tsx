@@ -6,7 +6,7 @@ import styled from "@emotion/styled";
 import Sidebar from "../Sidebar";
 import styles from './User.module.css'
 import {useNavigate, useParams} from "react-router-dom";
-
+import { TailSpin } from 'react-loading-icons'
 
 interface IUserData {
     id: number,
@@ -20,12 +20,16 @@ interface IUserData {
 
 const User: React.FC = () => {
     const [user, setUser] = useState<IUserData>();
+    const [fetching, setFetching] = useState<boolean>(true);
     const navigate = useNavigate();
     const props = useParams();
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/user/id/${props.id}`, queryConfig)
-            .then(res => setUser(res.data))
+            .then(res => {
+                setFetching(false);
+                setUser(res.data);
+            })
             .catch(console.log)
     }, []);
 
@@ -38,22 +42,30 @@ const User: React.FC = () => {
     return (
         <div>
             <Sidebar/>
-            <button onClick={() => navigate("/users")} className={styles.back}>BACK</button>
+            <button
+                onClick={() => navigate("/users", {replace:false})}
+                className={styles.back}
+                >BACK
+            </button>
             <div className={styles.form}>
-                <FormControl>
-                    {
-                        user &&
-                        Object.keys(user!).map((key, index) =>
-                            <StyledTextField
-                                key={key}
-                                label={key.replaceAll('_', ' ')}
-                                defaultValue={user[key as keyof typeof user]}
-                                inputProps={{
-                                    readOnly: true
-                                }}
-                            />)
-                    }
-                </FormControl>
+                {
+                    fetching ?
+                        <TailSpin className={styles.spinner} stroke="#678DA6" strokeWidth="3px"/> :
+                        <FormControl>
+                            {
+                                user &&
+                                Object.keys(user!).map((key, index) =>
+                                    <StyledTextField
+                                        key={key}
+                                        label={key.replaceAll('_', ' ')}
+                                        defaultValue={user[key as keyof typeof user]}
+                                        inputProps={{
+                                            readOnly: true
+                                        }}
+                                    />)
+                            }
+                        </FormControl>
+                }
             </div>
         </div>
     );

@@ -15,3 +15,9 @@ button.back:hover {
 .form {
     margin-top: 70px;
 }
+
+.spinner {
+    width: 1000px;
+    height: 100px;
+    margin-left: 100px;
+}
