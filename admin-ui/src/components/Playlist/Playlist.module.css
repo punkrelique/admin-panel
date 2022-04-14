@@ -1,0 +1,36 @@
+h1.form {
+    margin-left: 100px;
+}
+
+.form {
+    margin-top: 60px;
+}
+
+h1.title {
+    margin-left: 270px;
+    font-weight: lighter;
+    position: relative;
+    top: 60px;
+}
+
+button.update {
+    position: relative;
+    left: 255px;
+    padding: 15px;
+    width: 100px;
+    margin: 15px 15px;
+    background-color: #e0e0e0;
+    border: none;
+}
+
+button.update:hover {
+    background-color: #bdbdbd;
+}
+
+.tracks {
+    margin-left: 270px;
+}
+
+.tracks h1 {
+    font-weight: lighter;
+}

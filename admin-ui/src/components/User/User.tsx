@@ -7,6 +7,7 @@ import Sidebar from "../Sidebar";
 import styles from './User.module.css'
 import {useNavigate, useParams} from "react-router-dom";
 import { TailSpin } from 'react-loading-icons'
+import BackButton from "../BackButton/BackButton";
 
 interface IUserData {
     id: number,
@@ -25,7 +26,7 @@ const User: React.FC = () => {
     const props = useParams();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/user/id/${props.id}`, queryConfig)
+        axios.get(`user/id/${props.id}`, queryConfig)
             .then(res => {
                 setFetching(false);
                 setUser(res.data);
@@ -42,15 +43,14 @@ const User: React.FC = () => {
     return (
         <div>
             <Sidebar/>
-            <button
-                onClick={() => navigate("/users", {replace:false})}
-                className={styles.back}
-                >BACK
-            </button>
+            <BackButton page={'users'}/>
             <div className={styles.form}>
                 {
                     fetching ?
-                        <TailSpin className={styles.spinner} stroke="#678DA6" strokeWidth="3px"/> :
+                        <TailSpin
+                            className={styles.spinner}
+                            stroke="#678DA6"
+                            strokeWidth="3px"/> :
                         <FormControl>
                             {
                                 user &&
