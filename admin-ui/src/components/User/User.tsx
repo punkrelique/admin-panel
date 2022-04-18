@@ -43,7 +43,7 @@ const User: React.FC = () => {
         <div>
             <Sidebar/>
             <button
-                onClick={() => navigate("/users", {replace:false})}
+                onClick={() => navigate("/Users", {replace:false})}
                 className={styles.back}
                 >BACK
             </button>
@@ -54,7 +54,7 @@ const User: React.FC = () => {
                         <FormControl>
                             {
                                 user &&
-                                Object.keys(user!).map((key, index) =>
+                                Object.keys(user!).map((key) =>
                                     <StyledTextField
                                         key={key}
                                         label={key.replaceAll('_', ' ')}
