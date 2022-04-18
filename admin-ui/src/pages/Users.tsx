@@ -69,31 +69,55 @@ const Users = () => {
     }, [input[0], type[0]]);
 
     const userSearch =() => {
+        if (type[0] == ''){
+            alert('Use filter');
+            return;
+        }
         setFetching(true);
         setTimeout(()=>{
-        axios.get(url +'user/email/'
-            + input[0]
-            + '?offset=' + offset
-            + '&limit=15'
-            + '&userType=' + type[0], {
+        if (type[0] == 'id'){
+        axios.get(url +'user/id/'
+            + input[0], {
             headers: {
                 'Authorization': `token ${getCookie('SAT')}`
             }
         })
-        .then((res) =>{
-            setUsers([...users, ...res.data]);
-            setOffset(offset + 15);
+        .then((res) => {
+            setUsers([res.data]);
             setFetching(false);
-            if(res.data.length == 0){
-                setReceived(false)
-            }
+            setReceived(false)
         })
         .catch((error) => {
             if (error.response.status === 403) {
                 /*logout*/
             }
         });
-        }, 500)
+        }
+        else {
+            axios.get(url + 'user/email/'
+                + input[0]
+                + '?offset=' + offset
+                + '&limit=15'
+                + '&userType=' + type[0], {
+                headers: {
+                    'Authorization': `token ${getCookie('SAT')}`
+                }
+            })
+                .then((res) => {
+                    setUsers([...users, ...res.data]);
+                    setOffset(offset + 15);
+                    setFetching(false);
+                    if (res.data.length == 0) {
+                        setReceived(false)
+                    }
+                })
+                .catch((error) => {
+                    if (error.response.status === 403) {
+                        /*logout*/
+                    }
+                });
+            }
+        }, 100)
     };
 
     let renderList = users?.map((user: user, index) => {
@@ -121,33 +145,34 @@ const Users = () => {
 
     loadMore =
     (users.length > 0 && received)?
-            <Button
-                sx={{width: "100%", m: 0}}
-                size={"small"}
-                onClick={() => {
-                    userSearch();
-                }}>
-                {
-                    fetching?
-                        <TailSpin className="spinner"
-                                  stroke="#616161"
-                                  strokeWidth="3px"
-                                  width={20}
-                                  style={{margin: 0}}
-                        />:
-                        <KeyboardDoubleArrowDown color={"secondary"}
-                                                 sx={{m:1}}/>
-                }
-            </Button> : '';
+        <Button
+            sx={{width: "100%", m: 0}}
+            size={"small"}
+            onClick={() => {
+                userSearch();
+            }}>
+            {
+                fetching?
+                    <TailSpin className="spinner"
+                              stroke="#616161"
+                              strokeWidth="3px"
+                              width={20}
+                              style={{margin: 0}}
+                    />:
+                    <KeyboardDoubleArrowDown color={"secondary"}
+                                             sx={{m:1}}/>
+            }
+        </Button> : '';
 
     return (
         <div>
             <Sidebar/>
             <Header
-                typeOptions={['user', 'artist']}
+                typeOptions={['user', 'artist', 'id']}
                 onSearch={userSearch}
                 inputState={input}
                 typeState={type}
+                addButton={false}
             />
             <div style={{height: "70px"}}/>
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>

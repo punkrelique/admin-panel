@@ -6,12 +6,14 @@ import Toolbar from '@mui/material/Toolbar';
 import SelectType from "./SelectType";
 import {InputAdornment, TextField} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import {Link} from "react-router-dom";
 
 type Props ={
     typeOptions: string[];
-    onSearch: (event: any)=>void;
-    inputState:  [string, React.Dispatch<React.SetStateAction<string>>]
-    typeState:  [string, React.Dispatch<React.SetStateAction<string>>]
+    onSearch: ()=>void;
+    inputState:  [string, React.Dispatch<React.SetStateAction<string>>];
+    typeState:  [string, React.Dispatch<React.SetStateAction<string>>];
+    addButton: boolean;
 }
 
 const Header: React.FC<Props> =
@@ -25,7 +27,7 @@ const Header: React.FC<Props> =
 
     const onEnter = (event: any) =>{
         if (event.key === 'Enter' && input !== '') {
-            onSearch(event);
+            onSearch();
         }
     }
 
@@ -53,6 +55,12 @@ const Header: React.FC<Props> =
                                 options={typeOptions}
                     />
                     <Box sx={{ flexGrow: 1 }} />
+                    <Link
+                        to={"/NewPlaylist"}
+                        style={{color: "grey", padding: "5px", textDecoration: "none", border: "solid 1px", borderRadius: "5px", borderColor: "grey"}}
+                    >
+                        ADD PLAYLIST
+                    </Link>
                 </Toolbar>
             </AppBar>
         </Box>
