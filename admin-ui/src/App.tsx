@@ -7,6 +7,7 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {grey, red} from "@mui/material/colors";
 import User from "./components/User/User";
+import CreatePlaylist from "./pages/Playlist/CreatePlaylist";
 
 const appTheme = createTheme({
     palette: {
@@ -30,6 +31,7 @@ function App() {
                     <Route path="/" element={<Home/>}/>
                     <Route path="/Content" element={<Content/>}/>
                     <Route path="/User/:id" element={<User/>}/>
+                    <Route path="/CreatePlaylist" element={<CreatePlaylist/>}/>
                 </Route>
             </Routes>
         </div>
