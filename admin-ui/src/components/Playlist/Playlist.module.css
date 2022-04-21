@@ -13,17 +13,14 @@ h1.title {
     top: 60px;
 }
 
-button.update {
-    position: relative;
-    left: 255px;
+button.info {
     padding: 15px;
     width: 100px;
-    margin: 15px 15px;
     background-color: #e0e0e0;
     border: none;
 }
 
-button.update:hover {
+button.info:hover {
     background-color: #bdbdbd;
 }
 
@@ -33,4 +30,45 @@ button.update:hover {
 
 .tracks h1 {
     font-weight: lighter;
+}
+
+button.update {
+    position: relative;
+    left: 255px;
+    margin: 15px 15px;
+}
+
+div.playlistSongsHeader {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.spinner {
+    margin-left: 150px;
+    margin-top: 100px;
+    width: 100px;
+}
+
+.drop {
+    margin-left: 270px;
+    margin-top: 10px;
+    border: 1px solid #bdbdbd;
+    border-radius: 10px;
+    width: 500px;
+    text-align: center;
+    font-size: 18px;
+    cursor: pointer;
+    color: #bdbdbd;
+}
+
+.drop:hover {
+    border-color: gray;
+}
+
+div.files {
+    margin-left: 271px;
+    margin-top: 5px;
+    text-decoration: none;
 }
