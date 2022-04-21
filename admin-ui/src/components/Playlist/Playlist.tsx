@@ -20,9 +20,7 @@ const Playlist = () => {
     const [title, setTitle] = useState<string | null>();
     const [userId, setUserId] = useState<string | null>();
     const [type, setType] = useState<string | null>();
-    const [img, setImg] = useState<string | null>();
     const [headerTitle, setHeaderTitle] = useState<string | null | undefined>("Loading..");
-    const [file, setFile] = useState<any>();
     const props = useParams();
 
     useEffect(() => {
@@ -33,7 +31,6 @@ const Playlist = () => {
                 setTitle(res.data[0]["title"]);
                 setUserId(res.data[0]["user_id"]);
                 setType(res.data[0]["type"]);
-                setImg(res.data[0]["img_src"]);
                 setHeaderTitle(title!);
                 setFetching(false);
             })
@@ -54,11 +51,10 @@ const Playlist = () => {
             title: title!,
             user_id: userId!,
             type: type!,
-            img_src: img!
+            img_src: acceptedFiles!
         }, queryConfig)
             .then(res => {
                 setUpdating(false);
-                console.log(res)
             })
             .catch(er => {
                 setUpdating(false);
@@ -69,20 +65,7 @@ const Playlist = () => {
     if (!headerTitle)
         setHeaderTitle(title);
 
-    const onDrop = useCallback((acceptedFiles) => {
-        acceptedFiles.forEach((file:FileWithPath) => {
-            const reader = new Image()
-            reader.onabort = () => console.log('file reading was aborted')
-            reader.onerror = () => console.log('file reading has failed')
-            reader.onload = () => {
-                const binaryStr = reader;
-                console.log(binaryStr)
-            }
-        })
-    }, [])
-
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
-        onDrop,
         minSize: 0,
         maxSize: 1048576
     });
@@ -101,7 +84,7 @@ const Playlist = () => {
             <div className={styles.form}>
                 {
                     fetching ?
-                        <TailSpin className={styles.spinner} stroke="#678DA6" strokeWidth="3px"/>
+                        <TailSpin className={styles.spinner} stroke="#678DA6" strokeWidth="5px"/>
                         :
                         <form onSubmit={handleUpdatePlaylist}>
                         <FormControl>
@@ -123,7 +106,6 @@ const Playlist = () => {
                             />
                             <StyledTextField
                                 size='medium'
-                                margin='dense'
                                 multiline={false}
                                 inputProps={{
                                     readOnly: fetching,
@@ -145,9 +127,10 @@ const Playlist = () => {
                                 }}
                                 required
                             />
+                            <FormControl>
                             <InputLabel sx={{
                                 marginLeft: "272px",
-                                marginTop: "333px"
+                                marginTop: "21px"
                             }} id="demo-simple-select-label">type</InputLabel>
                             <Select
                                 value={type}
@@ -166,6 +149,7 @@ const Playlist = () => {
                                 <MenuItem value={"ep"}>Ep</MenuItem>
                                 <MenuItem value={"user"}>User</MenuItem>
                             </Select>
+                            </FormControl>
                             {
                                 updating ?
                                     <TailSpin
