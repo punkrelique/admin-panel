@@ -13,6 +13,20 @@ h1.title {
     top: 60px;
 }
 
+button.back {
+    position: absolute;
+    left: 255px;
+    padding: 15px;
+    width: 100px;
+    margin: 15px 15px;
+    background-color: #e0e0e0;
+    border: none;
+}
+
+button.back:hover {
+    background-color: #bdbdbd;
+}
+
 button.info {
     padding: 15px;
     width: 100px;

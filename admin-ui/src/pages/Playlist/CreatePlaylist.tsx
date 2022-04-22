@@ -1,22 +1,33 @@
 import React, {useState} from 'react';
-import {Button, FormControl, TextField} from "@mui/material";
+import {Button, FormControl, InputLabel, MenuItem, TextField} from "@mui/material";
 import styled from "@emotion/styled";
 import Sidebar from "../../components/Sidebar";
 import {useNavigate, useParams} from "react-router-dom";
 import styles from "../Playlist/CreatePlaylist.module.css";
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import {useDropzone, FileWithPath} from "react-dropzone";
+import axios from "axios";
 
 const StyledTextField = styled(TextField)`
       width: 500px;
       margin-left: 270px;
       margin-top: 20px;`
 
+function getCookie(cookieName: string) {
+    let cookie: {[name:string]: string} = {};
+    document.cookie.split(';').forEach(function(el) {
+        let [key,value] = el.split('=');
+        cookie[key.trim()] = value;
+    })
+    return cookie[cookieName];
+}
+
 const CreatePlaylist = () => {
     const [id, setId] = useState('');
     const [title, setTitle] = useState('');
     const [type, setType] = useState('');
-    const [fetching, setFetching] = useState<boolean>(true);
+    const [uploading, setUploading] = useState<boolean>(true);
     const navigate = useNavigate();
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
         minSize: 0,
@@ -29,11 +40,38 @@ const CreatePlaylist = () => {
         </p>
     ));
 
+    const createPlaylist =  () => {
+        setUploading(true);
+        axios.post("http://localhost:8080/api/content/playlist", {
+            id: 0,
+            title: title,
+            user_id: id,
+            type: type,
+            img_src: `${acceptedFiles.map((file: FileWithPath) => file.path)}`
+        }, {
+            headers: {
+                'Authorization': `token ${getCookie('SAT')}`
+            }})
+            .then(res => {
+                setUploading(false);
+            })
+            .catch(er => {
+                setUploading(false);
+                console.log(er)
+            });
+    }
+
+
     return (
         <div>
             <Sidebar/>
             {/*<BackButton page={'content'}/>*/}
-            <FormControl sx={{pt: 7}}>
+            <button
+                onClick={() => navigate(`/content`, {replace:false})}
+                className={styles.back}
+            >BACK
+            </button>
+            <FormControl sx={{pt: 8}}>
                 <div className={styles.drop} {...getRootProps()}>
                     <input {...getInputProps()} />
                     <p>Click or drag to upload cover (1mb max)</p>
@@ -46,17 +84,21 @@ const CreatePlaylist = () => {
                     onChange={(e) => setTitle(e.target.value)}
                     color={"secondary"}
                     label={'Title'}
-                    inputProps={{
-                        readOnly: fetching,
-                        autoComplete: 'off'
-                    }}
                 />
-                <StyledTextField
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    color={"secondary"}
-                    label={'Type'}
-                />
+                <FormControl color={"secondary"} sx={{ml: 34, mt: 2}}>
+                    <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={type}
+                        label="Type"
+                        onChange={(e)=>setType(e.target.value)}
+                    >
+                        <MenuItem value={'album'}>Album</MenuItem>
+                        <MenuItem value={'single'}>Single</MenuItem>
+                        <MenuItem value={'ep'}>EP</MenuItem>
+                    </Select>
+                </FormControl>
                 <StyledTextField
                     onChange={(e) => setId(e.target.value)}
                     color={"secondary"}
@@ -65,6 +107,7 @@ const CreatePlaylist = () => {
                 />
                 <button
                     type="submit"
+                    onClick={createPlaylist}
                     className={`${styles.info} ${styles.update}`}
                 >
                     CREATE
