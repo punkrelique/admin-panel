@@ -3,11 +3,12 @@ const Router = require('express');
 const router = new Router();
 const playlistController = require('../controllers/content/playlist.controller');
 const songController = require('../controllers/content/song.controller')
+const {imageUpload, songUpload} = require('../upload');
 
-router.get('/playlist', playlistController.getPlaylists) // TODO: offset limit
+router.get('/playlist', playlistController.getPlaylists)
 router.get('/playlist/:id', playlistController.getPlaylistByID)
-router.post('/playlist', playlistController.addPlaylist)
-router.put('/playlist', playlistController.updatePlaylist)
+router.post('/playlist', imageUpload, playlistController.addPlaylist) // TODO: swagger docs for upload/get files
+router.put('/playlist', imageUpload, playlistController.updatePlaylist)
 router.delete('/playlist/:id', playlistController.deletePlaylistByID)
 router.get('/playlist/:id/songs', playlistController.getSongsFromPlaylistByID)
 router.delete('/playlist/:idP/song/:idS', playlistController.removeSongFromPlaylistByID)

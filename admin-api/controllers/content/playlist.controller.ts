@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
+import {uploadPathSongs} from "../../upload";
+const {uploadPathCovers} = require("../../upload");
 const db = require('../../db')
-const jwt = require('jsonwebtoken')
-const { secret } = require('../../config')
+
+interface MulterRequest extends Request {
+    file: any;
+}
 
 class PlaylistController {
     async getPlaylists(req: Request, res: Response) {
@@ -21,6 +25,7 @@ class PlaylistController {
                 SELECT * FROM playlist
                 OFFSET $1 LIMIT $2
                 `, [offset, limit])
+
             res.json(content.rows);
         }
         catch (e) {
@@ -38,7 +43,7 @@ class PlaylistController {
                 FROM playlist
                 WHERE id = $1
             `, [id])
-            res.json(content.rows);
+            res.json(content.rows)
         }
         catch (e) {
             res.status(400).send({
@@ -49,14 +54,16 @@ class PlaylistController {
 
     async updatePlaylist(req: Request, res: Response) {
         try {
-            const { id, title, type, source } = req.body
+            const { filename } = (req as MulterRequest).file
+            const { id, title, type } = req.body
+            const source = uploadPathCovers + `/${filename}`
             const song = await db.query(`
                 UPDATE playlist
                 SET title = $1, type = $2, img_src = $3
                 WHERE id = $4
                 RETURNING *
             `, [title, type, source, id])
-            res.json(song.rows);
+            res.json(song.rows)
         }
         catch (e) {
             res.status(400).send({
@@ -85,16 +92,16 @@ class PlaylistController {
 
     async addPlaylist(req: Request, res: Response) {
         try {
-            const token = req.headers.authorization?.split(' ')[1]
-            const userId = jwt.verify(token, secret)['id']
-            const { title, type, img_src, user_id } = req.body;
+            const { filename } = (req as MulterRequest).file
+            const { title, type, user_id } = req.body
+            const source = uploadPathCovers + `/${filename}`
             const content = await db.query(`
                 INSERT INTO playlist
                 (title, user_id, type, img_src)
                 VALUES ($1, $2, $3, $4)
                 RETURNING *
-            `, [title, user_id ?? userId, type, img_src])
-            res.json(content.rows);
+            `, [title, user_id, type, source])
+            res.json(content.rows)
         }
         catch (e) {
             res.status(400).send({
