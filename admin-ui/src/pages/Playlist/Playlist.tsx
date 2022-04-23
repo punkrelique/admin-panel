@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import queryConfig from "../../components/QueryConfig";
+import queryConfig, {queryConfigMultipart} from "../../components/QueryConfig";
 import styled from "@emotion/styled";
 import {FormControl, TextField} from "@mui/material";
 import Sidebar from "../../components/Sidebar";
@@ -25,7 +25,7 @@ const Playlist: React.FC = () => {
     const props = useParams();
 
     useEffect(() => {
-        axios.get(`/content/playlist/${props.id}`, queryConfig)
+        axios.get(`/content/playlist/1`, queryConfig)
             .then(res => {
                 setId(res.data[0]["id"]);
                 setTitle(res.data[0]["title"]);
@@ -44,15 +44,17 @@ const Playlist: React.FC = () => {
     `
 
     const handleUpdatePlaylist = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
         setUpdating(true);
-        axios.put("/content/playlist", {
-            id: id!,
-            title: title!,
-            user_id: userId!,
-            type: type!,
-            img_src: dropData.acceptedFiles!
-        }, queryConfig)
+        e.preventDefault();
+
+        const form: any = new FormData();
+        form.append('id', id!);
+        form.append('title', title!);
+        form.append('userId', userId!);
+        form.append('type', type!);
+        form.append('cover', dropData.acceptedFiles![0]);
+
+        axios.put("/content/playlist", form, queryConfigMultipart)
             .then(res => {
                 setUpdating(false);
                 setHeaderTitle(title!);

@@ -3,6 +3,15 @@ const queryConfig = {
     baseURL: 'http://localhost:8080/api/'
 };
 
+const queryConfigMultipart = {
+    headers: {
+        Authorization: `Bearer ${getToken()}`,
+        'Content-Type': 'multipart/form-data; boundary=myBoundary'
+    },
+    baseURL: 'http://localhost:8080/api/'
+};
+
+
 function getToken() {
     let cookie: {[name:string]: string} = {};
     document.cookie.split(';').forEach(function(el) {
@@ -13,3 +22,7 @@ function getToken() {
 }
 
 export default queryConfig;
+
+export {
+    queryConfigMultipart
+}
