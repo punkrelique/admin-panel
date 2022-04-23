@@ -56,7 +56,7 @@ const Header: React.FC<Props> =
                     />
                     <Box sx={{ flexGrow: 1 }} />
                     <Link
-                        to={"/NewPlaylist"}
+                        to={"/CreatePlaylist"}
                         style={{color: "grey", padding: "5px", textDecoration: "none", border: "solid 1px", borderRadius: "5px", borderColor: "grey"}}
                     >
                         ADD PLAYLIST
