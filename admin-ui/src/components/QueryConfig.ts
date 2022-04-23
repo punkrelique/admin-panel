@@ -1,7 +1,6 @@
-import axios from "axios";
-
 const queryConfig = {
-    headers: { Authorization: `Bearer ${getToken()}` }
+    headers: { Authorization: `Bearer ${getToken()}` },
+    baseURL: 'http://localhost:8080/api/'
 };
 
 function getToken() {
