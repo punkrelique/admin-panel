@@ -1,4 +1,4 @@
-import React, {SyntheticEvent, useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import queryConfig from "../QueryConfig";
@@ -13,7 +13,7 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import {useDropzone, FileWithPath} from "react-dropzone";
 
-const Playlist = () => {
+const Playlist: React.FC = () => {
     const [fetching, setFetching] = useState<boolean>(true);
     const [updating, setUpdating] = useState<boolean>(false); // TODO: spinner)
     const [id, setId] = useState<string | null>();
@@ -24,7 +24,7 @@ const Playlist = () => {
     const props = useParams();
 
     useEffect(() => {
-        axios.get(`/content/playlist/1`, queryConfig)
+        axios.get(`/content/playlist/${props.id}`, queryConfig)
             .then(res => {
                 console.log(res.data[0])
                 setId(res.data[0]["id"]);
