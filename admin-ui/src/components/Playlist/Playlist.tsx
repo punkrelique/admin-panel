@@ -55,6 +55,7 @@ const Playlist = () => {
         }, queryConfig)
             .then(res => {
                 setUpdating(false);
+                setHeaderTitle(title!);
             })
             .catch(er => {
                 setUpdating(false);
@@ -102,7 +103,8 @@ const Playlist = () => {
                                 inputProps={{
                                     readOnly: true,
                                 }}
-                                value={id}
+                                color="secondary"
+                                defaultValue={id}
                             />
                             <StyledTextField
                                 size='medium'
@@ -114,6 +116,7 @@ const Playlist = () => {
                                 onBlur={(e) => setTitle(e.target.value)}
                                 label="title"
                                 defaultValue={title}
+                                color="secondary"
                                 required
                             />
                             <StyledTextField
@@ -125,13 +128,18 @@ const Playlist = () => {
                                     readOnly: fetching,
                                     autoComplete: 'off'
                                 }}
+                                color="secondary"
                                 required
                             />
                             <FormControl>
-                            <InputLabel sx={{
-                                marginLeft: "272px",
-                                marginTop: "21px"
-                            }} id="demo-simple-select-label">type</InputLabel>
+                            <InputLabel
+                                color="secondary"
+                                sx={{
+                                    marginLeft: "272px",
+                                    marginTop: "21px"
+                                }}
+
+                            >type</InputLabel>
                             <Select
                                 value={type}
                                 sx={{
@@ -139,15 +147,13 @@ const Playlist = () => {
                                     marginTop: "20px"
                                 }}
                                 label="type"
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
                                 onChange={(e) => setType(e.target.value)}
+                                color="secondary"
                                 required
                             >
                                 <MenuItem value={"album"}>Album</MenuItem>
                                 <MenuItem value={"single"}>Single</MenuItem>
                                 <MenuItem value={"ep"}>Ep</MenuItem>
-                                <MenuItem value={"user"}>User</MenuItem>
                             </Select>
                             </FormControl>
                             {
