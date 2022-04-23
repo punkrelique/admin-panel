@@ -54,7 +54,7 @@ const User: React.FC = () => {
                         <FormControl>
                             {
                                 user &&
-                                Object.keys(user!).map((key, index) =>
+                                Object.keys(user!).map((key) =>
                                     <StyledTextField
                                         key={key}
                                         label={key.replaceAll('_', ' ')}

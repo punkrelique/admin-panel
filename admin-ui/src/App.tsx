@@ -1,7 +1,7 @@
 import React from 'react';
 import  { Route, Routes } from "react-router-dom";
 import Home from "./pages/Users";
-import Contents from "./pages/Content";
+import Content from "./pages/Content";
 import { Login } from './pages/login/Login'
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import {createTheme, ThemeProvider} from "@mui/material";
@@ -29,7 +29,7 @@ function App() {
                 <Route element={<ProtectedRoutes/>}>
                     <Route path="/Users" element={<Home/>}/>
                     <Route path="/" element={<Home/>}/>
-                    <Route path="/Contents" element={<Contents/>}/>
+                    <Route path="/Content" element={<Content/>}/>
                     <Route path="/User/:id" element={<User/>}/>
                 </Route>
             </Routes>*/}

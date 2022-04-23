@@ -1,6 +1,5 @@
 import React from 'react';
-import {MenuItem, Select, ToggleButton, ToggleButtonGroup} from "@mui/material";
-import {FormControl} from "@mui/material";
+import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 
 export type Props ={
     value?: string;
@@ -26,7 +25,9 @@ const SelectType: React.FC<Props> = ({value,onChange, options} ) => {
         if (onChange) {
             onChange(event);
         }
-        setAlignment(newAlignment);
+        if (newAlignment !== null) {
+            setAlignment(newAlignment);
+        }
     };
 
     return (
