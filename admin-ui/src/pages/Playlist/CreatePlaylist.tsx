@@ -1,44 +1,35 @@
 import React, {useState} from 'react';
-import {Button, FormControl, InputLabel, MenuItem, TextField} from "@mui/material";
+import {FormControl, InputLabel, MenuItem, TextField} from "@mui/material";
 import styled from "@emotion/styled";
 import Sidebar from "../../components/Sidebar";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import styles from "../Playlist/CreatePlaylist.module.css";
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 
-import {useDropzone, FileWithPath} from "react-dropzone";
+import {useDropzone} from "react-dropzone";
 import axios from "axios";
+import Dropzone from "../../components/Dropzone/Dropzone";
+import queryConfig from "../../components/QueryConfig";
+import RedirectButton from "../../components/CustomButton/RedirectButton";
+import SimpleButton from "../../components/CustomButton/SimpleButton";
+import {TailSpin} from "react-loading-icons";
 
 const StyledTextField = styled(TextField)`
       width: 500px;
       margin-left: 270px;
       margin-top: 20px;`
 
-function getCookie(cookieName: string) {
-    let cookie: {[name:string]: string} = {};
-    document.cookie.split(';').forEach(function(el) {
-        let [key,value] = el.split('=');
-        cookie[key.trim()] = value;
-    })
-    return cookie[cookieName];
-}
 
 const CreatePlaylist = () => {
     const [id, setId] = useState('');
     const [title, setTitle] = useState('');
     const [type, setType] = useState('');
-    const [uploading, setUploading] = useState<boolean>(true);
+    const [uploading, setUploading] = useState<boolean>(false);
     const navigate = useNavigate();
-    const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
+    const dropData = useDropzone({
         minSize: 0,
         maxSize: 1048576
     });
-
-    const files = acceptedFiles.map((file: FileWithPath) => (
-        <p key={file.path}>
-            {file.path} - {file.size/1000000} mb
-        </p>
-    ));
 
     const createPlaylist =  () => {
         setUploading(true);
@@ -47,13 +38,11 @@ const CreatePlaylist = () => {
             title: title,
             user_id: id,
             type: type,
-            img_src: `${acceptedFiles.map((file: FileWithPath) => file.path)}`
-        }, {
-            headers: {
-                'Authorization': `token ${getCookie('SAT')}`
-            }})
+            img_src: dropData.acceptedFiles
+        }, queryConfig)
             .then(res => {
                 setUploading(false);
+                navigate(`/Playlist/${res.data[0].id}`)
             })
             .catch(er => {
                 setUploading(false);
@@ -61,24 +50,14 @@ const CreatePlaylist = () => {
             });
     }
 
-
     return (
         <div>
             <Sidebar/>
-            {/*<BackButton page={'content'}/>*/}
-            <button
-                onClick={() => navigate(`/content`, {replace:false})}
-                className={styles.back}
-            >BACK
-            </button>
-            <FormControl sx={{pt: 8}}>
-                <div className={styles.drop} {...getRootProps()}>
-                    <input {...getInputProps()} />
-                    <p>Click or drag to upload cover (1mb max)</p>
-                </div>
-                <div className={styles.files}>
-                    {files}
-                </div>
+            <RedirectButton page={'content'} text={"BACK"}/>
+            <h1 className={styles.title}>New Playlist</h1>
+            <div className={styles.form}>
+                <FormControl>
+                <Dropzone {...dropData}/>
                 <StyledTextField
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
@@ -105,14 +84,17 @@ const CreatePlaylist = () => {
                     label={'Artist Id'}
                     value={id}
                 />
-                <button
-                    type="submit"
-                    onClick={createPlaylist}
-                    className={`${styles.info} ${styles.update}`}
-                >
-                    CREATE
-                </button>
-            </FormControl>
+                    {
+                        uploading?
+                            <TailSpin
+                                className={styles.spinner}
+                                stroke="#678DA6"
+                                strokeWidth="2px"/>
+                            :
+                            <SimpleButton onClick={createPlaylist} text={"CREATE"}/>
+                    }
+                </FormControl>
+            </div>
         </div>
     );
 };

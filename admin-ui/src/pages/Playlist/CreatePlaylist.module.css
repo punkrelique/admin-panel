@@ -65,25 +65,3 @@ div.playlistSongsHeader {
     margin-top: 20px;
     margin-bottom: 16px;
 }
-
-.drop {
-    margin-left: 270px;
-    margin-top: 10px;
-    border: 1px solid #bdbdbd;
-    border-radius: 10px;
-    width: 500px;
-    text-align: center;
-    font-size: 18px;
-    cursor: pointer;
-    color: #bdbdbd;
-}
-
-.drop:hover {
-    border-color: gray;
-}
-
-div.files {
-    margin-left: 271px;
-    margin-top: 5px;
-    text-decoration: none;
-}

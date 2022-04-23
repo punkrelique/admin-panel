@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { FormControl, TextField } from "@mui/material";
 import axios from 'axios';
-import queryConfig from '../QueryConfig';
+import queryConfig from '../../components/QueryConfig';
 import styled from "@emotion/styled";
-import Sidebar from "../Sidebar";
+import Sidebar from "../../components/Sidebar";
 import styles from './User.module.css'
 import {useNavigate, useParams} from "react-router-dom";
 import { TailSpin } from 'react-loading-icons'
-import BackButton from "../BackButton/BackButton";
+import RedirectButton from "../../components/CustomButton/RedirectButton";
 
 interface IUserData {
     id: number,
@@ -43,7 +43,7 @@ const User: React.FC = () => {
     return (
         <div>
             <Sidebar/>
-            <BackButton page={'users'}/>
+            <RedirectButton page={'users'} text={"BACK"}/>
             <div className={styles.form}>
                 {
                     fetching ?

@@ -6,9 +6,9 @@ import { Login } from './pages/login/Login'
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {grey, red} from "@mui/material/colors";
-import User from "./components/User/User";
+import User from "./pages/User/User";
 import CreatePlaylist from "./pages/Playlist/CreatePlaylist";
-import Playlist from "./components/Playlist/Playlist";
+import Playlist from "./pages/Playlist/Playlist";
 
 const appTheme = createTheme({
     palette: {
@@ -25,7 +25,7 @@ function App() {
   return (
       <ThemeProvider theme={appTheme}>
         <div className="App">
-{/*            <Routes>
+            <Routes>
                 <Route path="/Login" element={<Login/>}/>
                 <Route element={<ProtectedRoutes/>}>
                     <Route path="/Users" element={<Home/>}/>
@@ -33,9 +33,9 @@ function App() {
                     <Route path="/Content" element={<Content/>}/>
                     <Route path="/User/:id" element={<User/>}/>
                     <Route path="/CreatePlaylist" element={<CreatePlaylist/>}/>
+                    <Route path="/Playlist/:id" element={<Playlist/>}/>
                 </Route>
-            </Routes>*/}
-            <Playlist/>
+            </Routes>
         </div>
       </ThemeProvider>
   );

@@ -2,7 +2,7 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-
+import styles from "./Header.module.css"
 import SelectType from "./SelectType";
 import {InputAdornment, TextField} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
@@ -57,7 +57,7 @@ const Header: React.FC<Props> =
                     <Box sx={{ flexGrow: 1 }} />
                     <Link
                         to={"/CreatePlaylist"}
-                        style={{color: "grey", padding: "5px", textDecoration: "none", border: "solid 1px", borderRadius: "5px", borderColor: "grey"}}
+                        className={styles.addplaylist}
                     >
                         ADD PLAYLIST
                     </Link>

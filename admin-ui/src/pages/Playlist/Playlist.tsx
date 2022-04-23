@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import queryConfig from "../QueryConfig";
+import queryConfig from "../../components/QueryConfig";
 import styled from "@emotion/styled";
 import {FormControl, TextField} from "@mui/material";
-import Sidebar from "../Sidebar";
-import styles from "../Playlist/Playlist.module.css";
+import Sidebar from "../../components/Sidebar";
+import styles from "./Playlist.module.css";
 import {TailSpin} from "react-loading-icons";
-import BackButton from "../BackButton/BackButton";
+import RedirectButton from "../../components/CustomButton/RedirectButton";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import {useDropzone, FileWithPath} from "react-dropzone";
+import Dropzone from "../../components/Dropzone/Dropzone";
 
 const Playlist: React.FC = () => {
     const [fetching, setFetching] = useState<boolean>(true);
@@ -26,7 +27,6 @@ const Playlist: React.FC = () => {
     useEffect(() => {
         axios.get(`/content/playlist/${props.id}`, queryConfig)
             .then(res => {
-                console.log(res.data[0])
                 setId(res.data[0]["id"]);
                 setTitle(res.data[0]["title"]);
                 setUserId(res.data[0]["user_id"]);
@@ -51,7 +51,7 @@ const Playlist: React.FC = () => {
             title: title!,
             user_id: userId!,
             type: type!,
-            img_src: acceptedFiles!
+            img_src: dropData.acceptedFiles!
         }, queryConfig)
             .then(res => {
                 setUpdating(false);
@@ -66,21 +66,15 @@ const Playlist: React.FC = () => {
     if (!headerTitle)
         setHeaderTitle(title);
 
-    const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
+    const dropData = useDropzone({
         minSize: 0,
         maxSize: 1048576
     });
 
-    const files = acceptedFiles.map((file: FileWithPath) => (
-        <p key={file.path}>
-            {file.path} - {file.size/1000000} mb
-        </p>
-    ));
-
     return (
         <div>
             <Sidebar/>
-            <BackButton page={'content'}/>
+            <RedirectButton page={'content'} text={"BACK"}/>
             <h1 className={styles.title}>Playlist — "{headerTitle ?? title}" </h1>
             <div className={styles.form}>
                 {
@@ -89,13 +83,7 @@ const Playlist: React.FC = () => {
                         :
                         <form onSubmit={handleUpdatePlaylist}>
                         <FormControl>
-                            <div className={styles.drop} {...getRootProps()}>
-                                <input {...getInputProps()} />
-                                <p>Click or drag to upload cover (1mb max)</p>
-                            </div>
-                            <div className={styles.files}>
-                                {files}
-                            </div>
+                            <Dropzone {...dropData}/>
                             <StyledTextField
                                 onChange={(e) => setId(e.target.value)}
                                 label="playlist id"
