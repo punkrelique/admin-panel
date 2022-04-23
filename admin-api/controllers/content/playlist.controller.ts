@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import {uploadPathSongs} from "../../upload";
 const {uploadPathCovers} = require("../../upload");
 const db = require('../../db')
 

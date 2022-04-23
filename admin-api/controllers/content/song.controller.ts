@@ -1,7 +1,10 @@
-import { Request, Response } from 'express';
-const jwt = require('jsonwebtoken')
-const { secret } = require('../../config')
+import { Request, Response } from 'express'
+const {uploadPathSongs} = require("../../upload")
 const db = require('../../db')
+
+interface MulterRequest extends Request {
+    file: any;
+}
 
 class SongController {
     async getSongs(req: Request, res: Response) {
@@ -68,13 +71,15 @@ class SongController {
 
     async addSong(req: Request, res: Response) {
         try {
-            const { userId, name, src } = req.body;
+            const { filename } = (req as MulterRequest).file
+            const { userId, name } = req.body
+            const source = uploadPathSongs + `/${filename}`
             const content = await db.query(`
                 INSERT INTO song
                 (name, user_id, source)
                 VALUES ($1, $2, $3)
                 RETURNING *
-            `, [name, userId, src])
+            `, [name, userId, source])
             res.json(content.rows[0]);
         }
         catch (e) {
@@ -86,7 +91,9 @@ class SongController {
 
     async updateSong(req: Request, res: Response) {
         try {
-            const { title, name, source } = req.body
+            const { filename } = (req as MulterRequest).file
+            const { title, name } = req.body
+            const source = uploadPathSongs + `/${filename}`
             const song = await db.query(`
                 UPDATE song
                 SET title = ${title}, name = ${name}, source = ${source}
