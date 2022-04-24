@@ -3,7 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import styles from "./Header.module.css"
-import SelectType from "./SelectType";
+import SelectType from "../SelectType";
 import {InputAdornment, TextField} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import {Link} from "react-router-dom";

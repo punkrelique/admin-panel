@@ -3,11 +3,11 @@ import { FormControl, TextField } from "@mui/material";
 import axios from 'axios';
 import queryConfig from '../../components/QueryConfig';
 import styled from "@emotion/styled";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import styles from './User.module.css'
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import { TailSpin } from 'react-loading-icons'
-import RedirectButton from "../../components/CustomButton/RedirectButton";
+import RedirectButton from "../../components/CustomButtons/RedirectButton";
 
 interface IUserData {
     id: number,
@@ -22,7 +22,6 @@ interface IUserData {
 const User: React.FC = () => {
     const [user, setUser] = useState<IUserData>();
     const [fetching, setFetching] = useState<boolean>(true);
-    const navigate = useNavigate();
     const props = useParams();
 
     useEffect(() => {
@@ -62,6 +61,7 @@ const User: React.FC = () => {
                                         inputProps={{
                                             readOnly: true
                                         }}
+                                        color="secondary"
                                     />)
                             }
                         </FormControl>

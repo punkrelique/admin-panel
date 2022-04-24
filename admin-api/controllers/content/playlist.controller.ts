@@ -53,16 +53,28 @@ class PlaylistController {
 
     async updatePlaylist(req: Request, res: Response) {
         try {
-            const { filename } = (req as MulterRequest).file
-            const { id, title, type } = req.body
-            const source = uploadPathCovers + `/${filename}`
-            const song = await db.query(`
-                UPDATE playlist
-                SET title = $1, type = $2, img_src = $3
-                WHERE id = $4
-                RETURNING *
-            `, [title, type, source, id])
-            res.json(song.rows)
+            const multerReq = (req as MulterRequest)
+            const filename = multerReq.file ? multerReq.file.filename : "";
+            const { id, title, type, user_id } = req.body
+            let playlist
+            if (filename) {
+                let source = uploadPathCovers + `/${filename}`
+                playlist = await db.query(`
+                    UPDATE playlist
+                    SET title = $1, type = $2, img_src = $3, user_id = $4
+                    WHERE id = $4
+                    RETURNING *
+                `, [title, type, source, user_id, id])
+            }
+            else {
+                playlist = await db.query(`
+                    UPDATE playlist
+                    SET title = $1, type = $2, user_id = $3
+                    WHERE id = $4
+                    RETURNING *
+                `, [title, type, user_id, id])
+            }
+            res.json(playlist.rows)
         }
         catch (e) {
             res.status(400).send({
@@ -91,15 +103,27 @@ class PlaylistController {
 
     async addPlaylist(req: Request, res: Response) {
         try {
-            const { filename } = (req as MulterRequest).file
+            const multerReq = (req as MulterRequest)
+            const filename = multerReq.file ? multerReq.file.filename : "";
             const { title, type, user_id } = req.body
             const source = uploadPathCovers + `/${filename}`
-            const content = await db.query(`
+            let content;
+            if (filename){
+                content = await db.query(`
                 INSERT INTO playlist
                 (title, user_id, type, img_src)
                 VALUES ($1, $2, $3, $4)
                 RETURNING *
             `, [title, user_id, type, source])
+            }
+            else {
+                content = await db.query(`
+                INSERT INTO playlist
+                (title, user_id, type)
+                VALUES ($1, $2, $3)
+                RETURNING *
+            `, [title, user_id, type])
+            }
             res.json(content.rows)
         }
         catch (e) {

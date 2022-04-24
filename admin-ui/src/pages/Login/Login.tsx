@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import { TailSpin } from 'react-loading-icons'
 import { Outlet } from "react-router-dom";
 import axios from "axios";
+import queryConfig from "../../components/QueryConfig";
 
 const isLogged = (): boolean => {
     return 0 === document.cookie.indexOf('SAT=');
@@ -17,10 +18,10 @@ const Login = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setFetching(true);
-        await axios.post('http://localhost:8080/api/auth/', {
+        await axios.post('/auth/', {
             email: email,
             password: password
-        }).then(data => data)
+        }, queryConfig).then(data => data)
             .then(res => {
                 setFetching(false);
                 document.cookie = `SAT=${res.data}; max-age=86400; path=/; secure; samesite=strict`

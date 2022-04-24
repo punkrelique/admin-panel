@@ -71,15 +71,27 @@ class SongController {
 
     async addSong(req: Request, res: Response) {
         try {
-            const { filename } = (req as MulterRequest).file
+            const multerReq = (req as MulterRequest)
+            const filename = multerReq.file ? multerReq.file.filename : "";
             const { userId, name } = req.body
             const source = uploadPathSongs + `/${filename}`
-            const content = await db.query(`
+            let content;
+            if (content) {
+                content = await db.query(`
                 INSERT INTO song
                 (name, user_id, source)
                 VALUES ($1, $2, $3)
                 RETURNING *
             `, [name, userId, source])
+            }
+            else {
+                content = await db.query(`
+                INSERT INTO song
+                (name, user_id, source)
+                VALUES ($1, $2)
+                RETURNING *
+            `, [name, userId])
+            }
             res.json(content.rows[0]);
         }
         catch (e) {
@@ -91,14 +103,25 @@ class SongController {
 
     async updateSong(req: Request, res: Response) {
         try {
-            const { filename } = (req as MulterRequest).file
+            const multerReq = (req as MulterRequest)
+            const filename = multerReq.file ? multerReq.file.filename : "";
             const { title, name } = req.body
             const source = uploadPathSongs + `/${filename}`
-            const song = await db.query(`
+            let song;
+            if (filename) {
+                song = await db.query(`
                 UPDATE song
                 SET title = ${title}, name = ${name}, source = ${source}
                 RETURNING *
             `)
+            }
+            else {
+                song = await db.query(`
+                UPDATE song
+                SET title = ${title}, name = ${name}
+                RETURNING *
+            `)
+            }
             res.json(song.rows[0]);
         }
         catch (e) {

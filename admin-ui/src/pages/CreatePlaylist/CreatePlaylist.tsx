@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
 import {FormControl, InputLabel, MenuItem, TextField} from "@mui/material";
 import styled from "@emotion/styled";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import {useNavigate} from "react-router-dom";
-import styles from "../Playlist/CreatePlaylist.module.css";
+import styles from "./CreatePlaylist.module.css";
 import Select from '@mui/material/Select';
 
 import {useDropzone} from "react-dropzone";
 import axios from "axios";
 import Dropzone from "../../components/Dropzone/Dropzone";
 import queryConfig from "../../components/QueryConfig";
-import RedirectButton from "../../components/CustomButton/RedirectButton";
-import SimpleButton from "../../components/CustomButton/SimpleButton";
+import RedirectButton from "../../components/CustomButtons/RedirectButton";
+import SimpleButton from "../../components/CustomButtons/SimpleButton";
 import {TailSpin} from "react-loading-icons";
 
 const StyledTextField = styled(TextField)`

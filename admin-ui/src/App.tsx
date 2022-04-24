@@ -2,12 +2,12 @@ import React from 'react';
 import  { Route, Routes } from "react-router-dom";
 import Home from "./pages/Users";
 import Content from "./pages/Content";
-import { Login } from './pages/login/Login'
+import { Login } from './pages/Login/Login'
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {grey, red} from "@mui/material/colors";
 import User from "./pages/User/User";
-import CreatePlaylist from "./pages/Playlist/CreatePlaylist";
+import CreatePlaylist from "./pages/CreatePlaylist/CreatePlaylist";
 import Playlist from "./pages/Playlist/Playlist";
 
 const appTheme = createTheme({

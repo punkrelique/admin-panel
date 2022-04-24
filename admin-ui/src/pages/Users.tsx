@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import {
     Paper,
     Table,
@@ -10,14 +10,13 @@ import {
     TableRow,
 } from "@mui/material";
 import {Link} from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/Sidebar/Sidebar";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import {KeyboardDoubleArrowDown} from "@mui/icons-material";
 import { TailSpin } from 'react-loading-icons';
 import {styled} from "@mui/material/styles";
-
-const url = 'http://localhost:8080/api/';
+import queryConfig from "../components/QueryConfig";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -38,15 +37,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-
-function getCookie(cookieName: string) {
-    let cookie: {[name:string]: string} = {};
-    document.cookie.split(';').forEach(function(el) {
-        let [key,value] = el.split('=');
-        cookie[key.trim()] = value;
-    })
-    return cookie[cookieName];
-}
 
 interface user {
     id: number,
@@ -76,12 +66,7 @@ const Users = () => {
         setFetching(true);
         setTimeout(()=>{
         if (type[0] == 'id'){
-        axios.get(url +'user/id/'
-            + input[0], {
-            headers: {
-                'Authorization': `token ${getCookie('SAT')}`
-            }
-        })
+        axios.get('/user/id/' + input[0], queryConfig)
         .then((res) => {
             setUsers([res.data]);
             setFetching(false);
@@ -94,15 +79,11 @@ const Users = () => {
         });
         }
         else {
-            axios.get(url + 'user/email/'
+            axios.get('/user/email/'
                 + input[0]
                 + '?offset=' + offset
                 + '&limit=15'
-                + '&userType=' + type[0], {
-                headers: {
-                    'Authorization': `token ${getCookie('SAT')}`
-                }
-            })
+                + '&userType=' + type[0], queryConfig)
                 .then((res) => {
                     setUsers([...users, ...res.data]);
                     setOffset(offset + 15);

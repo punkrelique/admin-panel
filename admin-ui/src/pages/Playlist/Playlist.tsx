@@ -4,10 +4,10 @@ import axios from "axios";
 import queryConfig, {queryConfigMultipart} from "../../components/QueryConfig";
 import styled from "@emotion/styled";
 import {FormControl, TextField} from "@mui/material";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import styles from "./Playlist.module.css";
 import {TailSpin} from "react-loading-icons";
-import RedirectButton from "../../components/CustomButton/RedirectButton";
+import RedirectButton from "../../components/CustomButtons/RedirectButton";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
@@ -46,15 +46,18 @@ const Playlist: React.FC = () => {
     const handleUpdatePlaylist = (e: React.FormEvent<HTMLFormElement>) => {
         setUpdating(true);
         e.preventDefault();
-
         const form: any = new FormData();
-        form.append('id', id!);
+        let config = queryConfig;
         form.append('title', title!);
-        form.append('userId', userId!);
+        form.append('id', id!);
+        form.append('user_id', userId!);
         form.append('type', type!);
-        form.append('cover', dropData.acceptedFiles![0]);
+        if (dropData.acceptedFiles[0]) {
+            form.append('cover', dropData.acceptedFiles![0])
+            config = queryConfigMultipart;
+        };
 
-        axios.put("/content/playlist", form, queryConfigMultipart)
+        axios.put("/content/playlist", form, config)
             .then(res => {
                 setUpdating(false);
                 setHeaderTitle(title!);
