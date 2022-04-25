@@ -10,6 +10,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import {Link} from "react-router-dom";
 import { styled } from '@mui/material/styles';
+import {Paper} from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -52,27 +53,27 @@ const Sidebar = () => {
             >
                 <Toolbar><Typography sx={{ml: 5}} variant='h6' >Admin Panel</Typography></Toolbar>
                 <Divider />
-                        <Box className={styles.button}>
-                            <StyledToggleButtonGroup
-                                orientation="vertical"
-                                value={view}
-                                exclusive
-                                onChange={handleChange}
-                                aria-label="text alignment"
-                                className={styles.btnGroup}
-                            >
-                                `<ToggleButton sx={{p: 0, height: 50}} value="top" aria-label="top aligned">
-                                    <Link className={styles.link} to="/Users">
-                                        <Typography variant={"inherit"} sx={{mt: 1}}>Users</Typography>
-                                    </Link>
-                                </ToggleButton>
-                                <ToggleButton sx={{p: 0, height: 50}} value="bottom" aria-label="bottom aligned">
-                                    <Link className={styles.link} to="/Content">
-                                        <Typography variant={"inherit"} sx={{mt: 1}}>Content</Typography>
-                                    </Link>
-                                </ToggleButton>
-                            </StyledToggleButtonGroup>
-                        </Box>
+                <Box className={styles.button}>
+                    <StyledToggleButtonGroup
+                        orientation="vertical"
+                        value={view}
+                        exclusive
+                        onChange={handleChange}
+                        aria-label="text alignment"
+                        className={styles.btnGroup}
+                    >
+                        `<ToggleButton sx={{p: 0, height: 50}} value="top" aria-label="top aligned">
+                            <Link className={styles.link} to="/Users">
+                                <Typography variant={"inherit"} sx={{mt: 1}}>Users</Typography>
+                            </Link>
+                        </ToggleButton>
+                        <ToggleButton sx={{p: 0, height: 50}} value="bottom" aria-label="bottom aligned">
+                            <Link className={styles.link} to="/Content">
+                                <Typography variant={"inherit"} sx={{mt: 1}}>Content</Typography>
+                            </Link>
+                        </ToggleButton>
+                    </StyledToggleButtonGroup>
+                </Box>
             </Drawer>
         </Box>
     );

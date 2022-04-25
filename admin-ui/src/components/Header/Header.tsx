@@ -7,6 +7,7 @@ import SelectType from "../SelectType";
 import {InputAdornment, TextField} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import {Link} from "react-router-dom";
+import Divider from "@mui/material/Divider";
 
 type Props ={
     typeOptions: string[];
@@ -33,7 +34,7 @@ const Header: React.FC<Props> =
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar color="inherit" position="fixed" sx={{paddingLeft: 30}}>
+            <AppBar color="inherit" elevation={0} position="fixed" sx={{paddingLeft: 30}}>
                 <Toolbar>
                     <TextField
                         color={"secondary"}
@@ -62,6 +63,7 @@ const Header: React.FC<Props> =
                         ADD PLAYLIST
                     </Link>
                 </Toolbar>
+                <Divider/>
             </AppBar>
         </Box>
     );
