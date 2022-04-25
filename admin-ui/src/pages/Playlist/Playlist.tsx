@@ -25,7 +25,7 @@ const Playlist: React.FC = () => {
     const props = useParams();
 
     useEffect(() => {
-        axios.get(`/content/playlist/1`, queryConfig)
+        axios.get(`/content/playlist/${props.id}`, queryConfig)
             .then(res => {
                 setId(res.data[0]["id"]);
                 setTitle(res.data[0]["title"]);
