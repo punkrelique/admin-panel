@@ -47,7 +47,7 @@ class UserController {
                 FROM user_info AS a
                 JOIN premium as b on a.id = b.user_id
                 JOIN profile as c on a.id = c.user_id
-                WHERE a.id = $1;`,
+                WHERE a.id = $1 AND c.type != 'admin'`,
                 [id])
             res.json(user.rows[0])
         }
