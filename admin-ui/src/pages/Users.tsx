@@ -156,7 +156,7 @@ const Users = () => {
                 addButton={false}
             />
             <div style={{height: "70px"}}/>
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <Paper elevation={0} sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer sx={{ maxHeight: 550 }}>
                     <Table
                         sx={{ minWidth: 550, maxWidth: "calc(50% - 250px)", marginLeft: "250px" }}
