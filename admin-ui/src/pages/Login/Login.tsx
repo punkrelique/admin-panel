@@ -15,6 +15,7 @@ const Login = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [fetching, setFetching] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setFetching(true);
@@ -28,13 +29,14 @@ const Login = () => {
                 return res.data;
             }).catch(e => {
                 setFetching(false);
+                setError("Wrong credentials! 😂")
             })
     }
 
     return isLogged() ? <Outlet/> :
         (
             <div className={styles.login}>
-                <form onSubmit={handleSubmit} style={{
+                <form onChange={() => setError("")} onSubmit={handleSubmit} style={{
                     display: 'flex',
                     flexDirection: 'column'
                 }}>
@@ -78,6 +80,10 @@ const Login = () => {
                             >Login</Button>
                     }
                 </form>
+                <p style={{
+                    color: 'red',
+                    textAlign: 'center'
+                }}>{error}</p>
         </div>
     );
 };
