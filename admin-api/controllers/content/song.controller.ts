@@ -56,7 +56,7 @@ class SongController {
             const id = req.params.id
             const content = await db.query(`
                 DELETE
-                FROM playlist
+                FROM song
                 WHERE id = $1
                 RETURNING *
             `, [id])

@@ -163,16 +163,15 @@ class PlaylistController {
         }
     }
 
-    async removeSongFromPlaylistByID(req: Request, res: Response) {
+    async removeSongsFromPlaylistByID(req: Request, res: Response) {
         try {
-            const { idS, idP } = req.params
+            const { idP } = req.params
             const song = await db.query(`
-                DELETE
-                FROM playlist_song
-                WHERE playlist_id = $1 AND song_id = $2
+                DELETE FROM song
+                WHERE id IN (SELECT song_id FROM playlist_song WHERE playlist_id = $1)
                 RETURNING *
-            `, [idP, idS])
-            res.json(song.rows[0]);
+            `, [idP])
+            res.json(song.rows);
         }
         catch (e) {
             res.status(400).send({
