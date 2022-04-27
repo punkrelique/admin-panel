@@ -115,13 +115,13 @@ const Content = () => {
 
     const contentSearch = () => (type[0] == 'song')? songSearch(): playlistSearch();
 
-    const contentDelete = (id: number) => {
+    const contentDelete = (id: number, index: number) => {
         if (type[0] == 'song'){
             axios.delete('content/song/'
                 + `${id}`, queryConfig)
                 .then(() => {
                     songs = [];
-                    setOffset(0);
+                    offset = index;
                     contentSearch();
                 });
         }
@@ -132,7 +132,7 @@ const Content = () => {
                 + `${id}`, queryConfig)
                 .then(() => {
                     playlists = [];
-                    setOffset(0);
+                    offset = index;
                     contentSearch();
                 });
             });
@@ -159,7 +159,7 @@ const Content = () => {
                     </Link>
                 </StyledTableCell>
                 <StyledTableCell>
-                    <Button onClick={() => contentDelete(playlist.id)}
+                    <Button onClick={() => contentDelete(playlist.id, index)}
                             style={{color: "orange", textDecoration: "none", border: "none"}}>
                         DELETE</Button>
                 </StyledTableCell>
@@ -187,7 +187,7 @@ const Content = () => {
                     </Link>
                 </StyledTableCell>
                 <StyledTableCell>
-                    <Button onClick={() => contentDelete(song.id)}
+                    <Button onClick={() => contentDelete(song.id, index)}
                             style={{color: "orange", textDecoration: "none", border: "none"}}>
                         DELETE</Button>
                 </StyledTableCell>
