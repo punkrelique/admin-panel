@@ -16,7 +16,7 @@ import Button from "@mui/material/Button";
 import {TailSpin} from "react-loading-icons";
 import {KeyboardDoubleArrowDown} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
-import queryConfig from "../components/QueryConfig";
+import {getToken, queryConfig} from "../components/QueryConfig";
 import playlist from "./Playlist/Playlist";
 
 
@@ -57,12 +57,13 @@ interface song {
 const Content = () => {
     let loadMore;
     const type = React.useState('playlist');
-    const input = React.useState('');
+    const input = React.useState(   '');
     let [offset, setOffset] = React.useState<number>(0);
     let [playlists, setPlaylists ] = React.useState<playlist[]>([]);
     let [songs, setSongs] = React.useState<song[]>([]);
     const [fetching, setFetching] = React.useState(true);
     const [received, setReceived] = React.useState(true);
+    let token = getToken();
 
     useEffect(() => {
         setPlaylists([]);
@@ -77,7 +78,7 @@ const Content = () => {
             axios.get('content/playlist/title/'
                 + input[0]
                 + '?offset=' + offset
-                + '&limit=15', queryConfig)
+                + '&limit=15', queryConfig(token))
                 .then((res) =>{
                     setPlaylists([...playlists, ...res.data]);
                     setOffset(offset+15);
@@ -98,7 +99,7 @@ const Content = () => {
             axios.get('content/song/name/'
                 + input[0]
                 + '?offset=' + offset
-                + '&limit=15', queryConfig)
+                + '&limit=15', queryConfig(token))
                 .then((res) =>{
                     setSongs([...songs, ...res.data]);
                     setOffset(offset+15);
@@ -118,7 +119,7 @@ const Content = () => {
     const contentDelete = (id: number, index: number) => {
         if (type[0] == 'song'){
             axios.delete('content/song/'
-                + `${id}`, queryConfig)
+                + `${id}`, queryConfig(token))
                 .then(() => {
                     songs = [];
                     offset = index;
@@ -126,10 +127,10 @@ const Content = () => {
                 });
         }
         else{
-            axios.delete(`content/playlist/${id}/song/`, queryConfig)
+            axios.delete(`content/playlist/${id}/song/`, queryConfig(token))
             .then(() => {
                 axios.delete('content/playlist/'
-                + `${id}`, queryConfig)
+                + `${id}`, queryConfig(token))
                 .then(() => {
                     playlists = [];
                     offset = index;

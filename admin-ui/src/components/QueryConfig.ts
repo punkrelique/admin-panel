@@ -1,15 +1,15 @@
-const queryConfig = {
-    headers: { Authorization: `Bearer ${getToken()}` },
+const queryConfig = (token: string) => { return {
+    headers: { Authorization: `Bearer ${token}` },
     baseURL: 'http://localhost:8080/api/'
-};
+}};
 
-const queryConfigMultipart = {
+const queryConfigMultipart = (token: string) =>  { return {
     headers: {
-        Authorization: `Bearer ${getToken()}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data; boundary=myBoundary'
     },
     baseURL: 'http://localhost:8080/api/'
-};
+}};
 
 
 function getToken() {
@@ -21,8 +21,8 @@ function getToken() {
     return cookie['SAT'];
 }
 
-export default queryConfig;
-
 export {
-    queryConfigMultipart
+    queryConfigMultipart,
+    queryConfig,
+    getToken
 }

@@ -9,7 +9,7 @@ import Select from '@mui/material/Select';
 import {useDropzone} from "react-dropzone";
 import axios from "axios";
 import Dropzone from "../../components/Dropzone/Dropzone";
-import queryConfig from "../../components/QueryConfig";
+import {getToken, queryConfig} from "../../components/QueryConfig";
 import RedirectButton from "../../components/CustomButtons/RedirectButton";
 import SimpleButton from "../../components/CustomButtons/SimpleButton";
 import {TailSpin} from "react-loading-icons";
@@ -30,6 +30,7 @@ const CreatePlaylist = () => {
         minSize: 0,
         maxSize: 1048576
     });
+    const token = getToken();
 
     const createPlaylist =  () => {
         setUploading(true);
@@ -39,7 +40,7 @@ const CreatePlaylist = () => {
             user_id: id,
             type: type,
             img_src: dropData.acceptedFiles
-        }, queryConfig)
+        }, queryConfig(token))
             .then(res => {
                 setUploading(false);
                 navigate(`/Playlist/${res.data[0].id}`)
