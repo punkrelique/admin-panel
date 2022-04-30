@@ -10,7 +10,6 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import {Link} from "react-router-dom";
 import { styled } from '@mui/material/styles';
-import {Paper} from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -36,6 +35,11 @@ const Sidebar = () => {
     const handleChange = (event: React.MouseEvent<HTMLElement>, nextView: string) => {
         setView(nextView);
     };
+
+    const handleLogout = async () => {
+        document.cookie = 'SAT=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -74,6 +78,13 @@ const Sidebar = () => {
                         </ToggleButton>
                     </StyledToggleButtonGroup>
                 </Box>
+                <Box sx={{ flexGrow: 1}}/>
+                <Divider/>
+                <ToggleButton sx={{p: 0, height: 50, border: 'none'}} value="bottom" aria-label="bottom aligned">
+                    <a href={'/'} className={styles.link} onClick={handleLogout}>
+                        Log Out
+                    </a>
+                </ToggleButton>
             </Drawer>
         </Box>
     );
