@@ -48,10 +48,9 @@ interface playlist {
 }
 
 interface song {
-    id: number,
-    name: string,
-    source: string,
-    user_id: number
+    song_id: number,
+    playlist_id: number,
+    name: string
 }
 
 const Content = () => {
@@ -153,7 +152,7 @@ const Content = () => {
                 </StyledTableCell>
                 <StyledTableCell sx={{width: 2}}>
                     <Link
-                        to={`/${type[0].charAt(0).toUpperCase() + type[0].slice(1)}/${playlist.id}`}
+                        to={`/playlist/${playlist.id}`}
                         style={{color: "grey", textDecoration: "none"}}
                     >
                         DETAILS
@@ -169,26 +168,26 @@ const Content = () => {
 
     let renderSongs = songs?.map((song: song, index) => {
         return (
-            <StyledTableRow key={song.id}>
+            <StyledTableRow key={song.song_id}>
                 <StyledTableCell sx={{width: 2}}>
                     {index+1}
                 </StyledTableCell>
                 <StyledTableCell sx={{width: 3}}>
-                    {song.id}
+                    {song.song_id}
                 </StyledTableCell>
                 <StyledTableCell>
                     {song.name}
                 </StyledTableCell>
                 <StyledTableCell sx={{width: 2}}>
                     <Link
-                        to={`/${type[0].charAt(0).toUpperCase() + type[0].slice(1)}/${song.id}`}
+                        to={`/playlist/${song.playlist_id}`}
                         style={{color: "grey", textDecoration: "none"}}
                     >
                         DETAILS
                     </Link>
                 </StyledTableCell>
                 <StyledTableCell>
-                    <Button onClick={() => contentDelete(song.id, index)}
+                    <Button onClick={() => contentDelete(song.song_id, index)}
                             style={{color: "orange", textDecoration: "none", border: "none"}}>
                         DELETE</Button>
                 </StyledTableCell>
