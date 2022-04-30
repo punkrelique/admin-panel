@@ -7,7 +7,7 @@
     text-decoration: none;
     color: black;
     width: 240px;
-    height: 3em;
+    /*height: 3em;*/
 }
 
 .link:active{

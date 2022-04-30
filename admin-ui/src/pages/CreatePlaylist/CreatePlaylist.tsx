@@ -9,7 +9,7 @@ import Select from '@mui/material/Select';
 import {useDropzone} from "react-dropzone";
 import axios from "axios";
 import Dropzone from "../../components/Dropzone/Dropzone";
-import queryConfig from "../../components/QueryConfig";
+import {getToken, queryConfig, queryConfigMultipart} from "../../components/QueryConfig";
 import RedirectButton from "../../components/CustomButtons/RedirectButton";
 import SimpleButton from "../../components/CustomButtons/SimpleButton";
 import {TailSpin} from "react-loading-icons";
@@ -30,18 +30,23 @@ const CreatePlaylist = () => {
         minSize: 0,
         maxSize: 1048576
     });
+    const token = getToken();
 
     const createPlaylist =  () => {
         setUploading(true);
-        axios.post("http://localhost:8080/api/content/playlist", {
-            id: 0,
-            title: title,
-            user_id: id,
-            type: type,
-            img_src: dropData.acceptedFiles
-        }, queryConfig)
+        const form: any = new FormData();
+        let config = queryConfig(token);
+        form.append('id', 0);
+        form.append('title', title!);
+        form.append('user_id', id!);
+        form.append('type', type!);
+        if (dropData.acceptedFiles[0]) {
+            form.append('cover', dropData.acceptedFiles![0])
+            config = queryConfigMultipart(token);
+        }
+        axios.post("/content/playlist", form, config)
             .then(res => {
-                setUploading(false);
+                setUploading(true);
                 navigate(`/Playlist/${res.data[0].id}`)
             })
             .catch(er => {

@@ -16,7 +16,7 @@ import axios from "axios";
 import {KeyboardDoubleArrowDown} from "@mui/icons-material";
 import { TailSpin } from 'react-loading-icons';
 import {styled} from "@mui/material/styles";
-import queryConfig from "../components/QueryConfig";
+import {getToken, queryConfig} from "../components/QueryConfig";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -51,6 +51,7 @@ const Users = () => {
     const [users, setUsers] = React.useState<user[]>([]);
     const [fetching, setFetching] = React.useState(true);
     const [received, setReceived] = React.useState(true);
+    let token = getToken();
 
     useEffect(() => {
         setUsers([]);
@@ -66,7 +67,7 @@ const Users = () => {
         setFetching(true);
         setTimeout(()=>{
         if (type[0] == 'id'){
-        axios.get('/user/id/' + input[0], queryConfig)
+        axios.get('/user/id/' + input[0], queryConfig(token))
         .then((res) => {
             setUsers([res.data]);
             setFetching(false);
@@ -83,7 +84,7 @@ const Users = () => {
                 + input[0]
                 + '?offset=' + offset
                 + '&limit=15'
-                + '&userType=' + type[0], queryConfig)
+                + '&userType=' + type[0], queryConfig(token))
                 .then((res) => {
                     setUsers([...users, ...res.data]);
                     setOffset(offset + 15);

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import queryConfig, {queryConfigMultipart} from "../../components/QueryConfig";
+import {getToken, queryConfig, queryConfigMultipart} from "../../components/QueryConfig";
 import styled from "@emotion/styled";
 import {FormControl, TextField} from "@mui/material";
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -23,9 +23,10 @@ const Playlist: React.FC = () => {
     const [type, setType] = useState<string | null>();
     const [headerTitle, setHeaderTitle] = useState<string | null | undefined>("Loading..");
     const props = useParams();
+    const token = getToken();
 
     useEffect(() => {
-        axios.get(`/content/playlist/${props.id}`, queryConfig)
+        axios.get(`/content/playlist/${props.id}`, queryConfig(token))
             .then(res => {
                 setId(res.data[0]["id"]);
                 setTitle(res.data[0]["title"]);
@@ -47,14 +48,14 @@ const Playlist: React.FC = () => {
         setUpdating(true);
         e.preventDefault();
         const form: any = new FormData();
-        let config = queryConfig;
+        let config = queryConfig(token);
         form.append('title', title!);
         form.append('id', id!);
         form.append('user_id', userId!);
         form.append('type', type!);
         if (dropData.acceptedFiles[0]) {
             form.append('cover', dropData.acceptedFiles![0])
-            config = queryConfigMultipart;
+            config = queryConfigMultipart(token);
         };
 
         axios.put("/content/playlist", form, config)

@@ -357,23 +357,15 @@
         ]
       }
     },
-    "/content/playlist/{idP}/song/{idS}": {
+    "/content/playlist/{idP}/song/": {
       "delete": {
         "tags": [
           "playlist"
         ],
-        "summary": "Remove song from playlist",
+        "summary": "Remove all songs from playlist",
         "parameters": [
           {
             "name": "idP",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "idS",
             "in": "path",
             "required": true,
             "schema": {
@@ -410,7 +402,7 @@
           "song"
         ],
         "summary": "Get lsit of songs that matches name",
-        "parametes": [
+        "parameters": [
           {
             "name": "name",
             "in": "path",
@@ -898,7 +890,11 @@
       "Song": {
         "type": "object",
         "properties": {
-          "id": {
+          "song_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "playlist_id": {
             "type": "integer",
             "format": "int64"
           },

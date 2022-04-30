@@ -16,8 +16,9 @@ import Button from "@mui/material/Button";
 import {TailSpin} from "react-loading-icons";
 import {KeyboardDoubleArrowDown} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
+import {getToken, queryConfig} from "../components/QueryConfig";
+import playlist from "./Playlist/Playlist";
 
-let url = 'http://localhost:8080/api/';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -39,92 +40,164 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function getCookie(cookieName: string) {
-    let cookie: {[name:string]: string} = {};
-    document.cookie.split(';').forEach(function(el) {
-        let [key,value] = el.split('=');
-        cookie[key.trim()] = value;
-    })
-    return cookie[cookieName];
-}
 
-interface content {
+interface playlist {
     id: number,
     title: string,
     type: string
 }
 
+interface song {
+    song_id: number,
+    playlist_id: number,
+    name: string
+}
+
 const Content = () => {
     let loadMore;
     const type = React.useState('playlist');
-    const input = React.useState('');
-    const [offset, setOffset] = React.useState<number>(0);
-    const [content, setContent] = React.useState<content[]>([]);
+    const input = React.useState(   '');
+    let [offset, setOffset] = React.useState<number>(0);
+    let [playlists, setPlaylists ] = React.useState<playlist[]>([]);
+    let [songs, setSongs] = React.useState<song[]>([]);
     const [fetching, setFetching] = React.useState(true);
     const [received, setReceived] = React.useState(true);
+    let token = getToken();
 
     useEffect(() => {
-        setContent([]);
+        setPlaylists([]);
+        setSongs([]);
         setOffset(0);
         setReceived(true)
     }, [input[0], type[0]]);
 
-    const contentSearch =() => {
+    const playlistSearch =() => {
         setFetching(true);
-        let cUrl = (type[0] == 'song')?
-            url + 'content/song/name/':
-            url + 'content/playlist/title/';
-
         setTimeout(()=>{
-            axios.get(cUrl
+            axios.get('content/playlist/title/'
                 + input[0]
                 + '?offset=' + offset
-                + '&limit=15', {
-                headers: {
-                    'Authorization': `token ${getCookie('SAT')}`
-                }
-            })
+                + '&limit=15', queryConfig(token))
                 .then((res) =>{
-                    setContent([...content, ...res.data]);
-                    setOffset(offset + 15);
+                    setPlaylists([...playlists, ...res.data]);
+                    setOffset(offset+15);
                     setFetching(false);
                     if(res.data.length == 0){
                         setReceived(false)
                     }
                 })
                 .catch((error) => {
-                    if (error.response.status === 403) {
-                        /*logout*/
-                    }
+                    console.log(error);
                 });
         }, 500)
     };
 
-    let renderList = content?.map((content: content, index) => {
+    const songSearch =() => {
+        setFetching(true);
+        setTimeout(()=>{
+            axios.get('content/song/name/'
+                + input[0]
+                + '?offset=' + offset
+                + '&limit=15', queryConfig(token))
+                .then((res) =>{
+                    setSongs([...songs, ...res.data]);
+                    setOffset(offset+15);
+                    setFetching(false);
+                    if(res.data.length == 0){
+                        setReceived(false)
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }, 500)
+    };
+
+    const contentSearch = () => (type[0] == 'song')? songSearch(): playlistSearch();
+
+    const contentDelete = (id: number, index: number) => {
+        if (type[0] == 'song'){
+            axios.delete('content/song/'
+                + `${id}`, queryConfig(token))
+                .then(() => {
+                    songs = [];
+                    offset = index;
+                    contentSearch();
+                });
+        }
+        else{
+            axios.delete(`content/playlist/${id}/song/`, queryConfig(token))
+            .then(() => {
+                axios.delete('content/playlist/'
+                + `${id}`, queryConfig(token))
+                .then(() => {
+                    playlists = [];
+                    offset = index;
+                    contentSearch();
+                });
+            });
+    }};
+
+    let renderPlaylists = playlists?.map((playlist: playlist, index) => {
         return (
-            <StyledTableRow key={content.id}>
+            <StyledTableRow key={playlist.id}>
                 <StyledTableCell sx={{width: 2}}>
                     {index+1}
                 </StyledTableCell>
                 <StyledTableCell sx={{width: 3}}>
-                    {content.id}
+                    {playlist.id}
                 </StyledTableCell>
                 <StyledTableCell>
-                    {content.title}
+                    {playlist.title}
                 </StyledTableCell>
                 <StyledTableCell sx={{width: 2}}>
                     <Link
-                        to={`/${type[0].charAt(0).toUpperCase() + type[0].slice(1)}/${content.id}`}
+                        to={`/playlist/${playlist.id}`}
                         style={{color: "grey", textDecoration: "none"}}
                     >
                         DETAILS
                     </Link>
                 </StyledTableCell>
+                <StyledTableCell>
+                    <Button onClick={() => contentDelete(playlist.id, index)}
+                            style={{color: "orange", textDecoration: "none", border: "none"}}>
+                        DELETE</Button>
+                </StyledTableCell>
             </StyledTableRow>
         )});
 
+    let renderSongs = songs?.map((song: song, index) => {
+        return (
+            <StyledTableRow key={song.song_id}>
+                <StyledTableCell sx={{width: 2}}>
+                    {index+1}
+                </StyledTableCell>
+                <StyledTableCell sx={{width: 3}}>
+                    {song.song_id}
+                </StyledTableCell>
+                <StyledTableCell>
+                    {song.name}
+                </StyledTableCell>
+                <StyledTableCell sx={{width: 2}}>
+                    <Link
+                        to={`/playlist/${song.playlist_id}`}
+                        style={{color: "grey", textDecoration: "none"}}
+                    >
+                        DETAILS
+                    </Link>
+                </StyledTableCell>
+                <StyledTableCell>
+                    <Button onClick={() => contentDelete(song.song_id, index)}
+                            style={{color: "orange", textDecoration: "none", border: "none"}}>
+                        DELETE</Button>
+                </StyledTableCell>
+            </StyledTableRow>
+        )});
+
+    let renderList = (type[0] == 'song')? renderSongs: renderPlaylists;
+
     loadMore =
-        (content.length > 0 && received)?
+        ((songs.length > 0 || playlists.length > 0) && received)?
             <Button
                 sx={{width: "100%", m: 0}}
                 size={"small"}
@@ -175,7 +248,7 @@ const Content = () => {
                         <TableBody>
                             { renderList}
                             <TableRow>
-                                <TableCell colSpan={4} >
+                                <TableCell colSpan={5} >
                                     {loadMore}
                                 </TableCell>
                             </TableRow>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FormControl, TextField } from "@mui/material";
 import axios from 'axios';
-import queryConfig from '../../components/QueryConfig';
+import {queryConfig, getToken} from '../../components/QueryConfig';
 import styled from "@emotion/styled";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import styles from './User.module.css'
@@ -23,9 +23,9 @@ const User: React.FC = () => {
     const [user, setUser] = useState<IUserData>();
     const [fetching, setFetching] = useState<boolean>(true);
     const props = useParams();
-
+    const token = getToken();
     useEffect(() => {
-        axios.get(`user/id/${props.id}`, queryConfig)
+        axios.get(`user/id/${props.id}`, queryConfig(token))
             .then(res => {
                 setFetching(false);
                 setUser(res.data);
