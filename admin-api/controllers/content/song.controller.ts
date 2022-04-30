@@ -165,9 +165,11 @@ class SongController {
                 })
 
             const users = await db.query(`
-                SELECT id, name
-                FROM song
-                WHERE name ~* ('.*' || $1 || '.*')
+                SELECT ps.song_id, ps.playlist_id, s.name, p.type FROM playlist_song as ps 
+                JOIN (SELECT * from song where song.name ~* ('.*' || $1 || '.*')) as s 
+                ON ps.song_id = s.id
+                JOIN (SELECT * FROM playlist WHERE playlist.type <> 'user') as p 
+                ON ps.playlist_id = p.id 
                 OFFSET $2 LIMIT $3`, [name, offset, limit])
             res.json(users.rows)
         }

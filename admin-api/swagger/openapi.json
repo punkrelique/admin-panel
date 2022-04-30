@@ -402,7 +402,7 @@
           "song"
         ],
         "summary": "Get lsit of songs that matches name",
-        "parametes": [
+        "parameters": [
           {
             "name": "name",
             "in": "path",
@@ -890,7 +890,11 @@
       "Song": {
         "type": "object",
         "properties": {
-          "id": {
+          "song_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "playlist_id": {
             "type": "integer",
             "format": "int64"
           },
