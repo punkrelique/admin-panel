@@ -82,8 +82,9 @@ const Content = () => {
                     setPlaylists([...playlists, ...res.data]);
                     setOffset(offset+15);
                     setFetching(false);
-                    if(res.data.length == 0){
+                    if(res.data.length === 0){
                         setReceived(false)
+                        setPlaylists([...playlists, {title: "< nothing found >", id: 0, type: "none"}]);
                     }
                 })
                 .catch((error) => {
@@ -103,8 +104,9 @@ const Content = () => {
                     setSongs([...songs, ...res.data]);
                     setOffset(offset+15);
                     setFetching(false);
-                    if(res.data.length == 0){
-                        setReceived(false)
+                    if(res.data.length === 0){
+                        setReceived(false);
+                        setSongs([...songs, {name: "< nothing found >", song_id: 0, playlist_id: 0}]);
                     }
                 })
                 .catch((error) => {
@@ -113,10 +115,10 @@ const Content = () => {
         }, 500)
     };
 
-    const contentSearch = () => (type[0] == 'song')? songSearch(): playlistSearch();
+    const contentSearch = () => (type[0] === 'song')? songSearch(): playlistSearch();
 
     const contentDelete = (id: number, index: number) => {
-        if (type[0] == 'song'){
+        if (type[0] === 'song'){
             axios.delete('content/song/'
                 + `${id}`, queryConfig(token))
                 .then(() => {
@@ -150,19 +152,25 @@ const Content = () => {
                 <StyledTableCell>
                     {playlist.title}
                 </StyledTableCell>
-                <StyledTableCell sx={{width: 2}}>
-                    <Link
-                        to={`/playlist/${playlist.id}`}
-                        style={{color: "grey", textDecoration: "none"}}
-                    >
-                        DETAILS
-                    </Link>
-                </StyledTableCell>
-                <StyledTableCell>
+                {playlist.id === 0?
+                "":
+                    <>
+                    <StyledTableCell sx={{width: 2}}>
+                        <Link
+                            to={`/playlist/${playlist.id}`}
+                            style={{color: "grey", textDecoration: "none"}}
+                        >
+                            DETAILS
+                        </Link>
+                    </StyledTableCell>
+                    <StyledTableCell>
                     <Button onClick={() => contentDelete(playlist.id, index)}
-                            style={{color: "orange", textDecoration: "none", border: "none"}}>
-                        DELETE</Button>
-                </StyledTableCell>
+                    style={{color: "orange", textDecoration: "none", border: "none"}}>
+                    DELETE</Button>
+                    </StyledTableCell>
+                    </>
+                }
+
             </StyledTableRow>
         )});
 
@@ -178,23 +186,28 @@ const Content = () => {
                 <StyledTableCell>
                     {song.name}
                 </StyledTableCell>
-                <StyledTableCell sx={{width: 2}}>
-                    <Link
-                        to={`/playlist/${song.playlist_id}`}
-                        style={{color: "grey", textDecoration: "none"}}
-                    >
-                        DETAILS
-                    </Link>
-                </StyledTableCell>
-                <StyledTableCell>
-                    <Button onClick={() => contentDelete(song.song_id, index)}
-                            style={{color: "orange", textDecoration: "none", border: "none"}}>
-                        DELETE</Button>
-                </StyledTableCell>
+                {song.song_id === 0?
+                    "":
+                    <>
+                    <StyledTableCell sx={{width: 2}}>
+                        <Link
+                            to={`/playlist/${song.playlist_id}`}
+                            style={{color: "grey", textDecoration: "none"}}
+                        >
+                            DETAILS
+                        </Link>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                        <Button onClick={() => contentDelete(song.song_id, index)}
+                                style={{color: "orange", textDecoration: "none", border: "none"}}>
+                            DELETE</Button>
+                    </StyledTableCell>
+                    </>
+                }
             </StyledTableRow>
         )});
 
-    let renderList = (type[0] == 'song')? renderSongs: renderPlaylists;
+    let renderList = (type[0] === 'song')? renderSongs: renderPlaylists;
 
     loadMore =
         ((songs.length > 0 || playlists.length > 0) && received)?

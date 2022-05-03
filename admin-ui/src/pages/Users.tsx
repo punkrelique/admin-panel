@@ -60,16 +60,17 @@ const Users = () => {
     }, [input[0], type[0]]);
 
     const userSearch =() => {
-        if (type[0] == ''){
-            alert('Use filter');
-            return;
-        }
         setFetching(true);
         setTimeout(()=>{
-        if (type[0] == 'id'){
-        axios.get('/user/id/' + input[0], queryConfig(token))
+        if (type[0] === 'id'){
+        axios.get('user/id/' + input[0], queryConfig(token))
         .then((res) => {
-            setUsers([res.data]);
+            if(res.data.length === 0){
+                setUsers([{email: "< nothing found >", id: 0}])
+            }
+            else{
+                setUsers([res.data]);
+            }
             setFetching(false);
             setReceived(false)
         })
@@ -80,7 +81,7 @@ const Users = () => {
         });
         }
         else {
-            axios.get('/user/email/'
+            axios.get('user/email/'
                 + input[0]
                 + '?offset=' + offset
                 + '&limit=15'
@@ -89,8 +90,9 @@ const Users = () => {
                     setUsers([...users, ...res.data]);
                     setOffset(offset + 15);
                     setFetching(false);
-                    if (res.data.length == 0) {
+                    if (res.data.length === 0) {
                         setReceived(false)
+                        setUsers([...users, {email: "< nothing found >", id: 0}])
                     }
                 })
                 .catch((error) => {
