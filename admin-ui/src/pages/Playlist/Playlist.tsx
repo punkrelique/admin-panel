@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import {getToken, queryConfig, queryConfigMultipart} from "../../components/QueryConfig";
@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import {useDropzone, FileWithPath} from "react-dropzone";
-import Dropzone from "../../components/Dropzone/Dropzone";
+import CoverUpload from "../../components/Dropzone/CoverUpload";
 
 const Playlist: React.FC = () => {
     const [fetching, setFetching] = useState<boolean>(true);
@@ -21,9 +21,19 @@ const Playlist: React.FC = () => {
     const [title, setTitle] = useState<string | null>();
     const [userId, setUserId] = useState<string | null>();
     const [type, setType] = useState<string | null>();
+    const [paths, setPaths] = useState([]);
     const [headerTitle, setHeaderTitle] = useState<string | null | undefined>("Loading..");
     const props = useParams();
     const token = getToken();
+
+    const onDrop = useCallback(acceptedFiles => {
+        setPaths(acceptedFiles.map((file: any) => URL.createObjectURL(file)));
+    }, [setPaths]);
+    const dropData = useDropzone({
+        minSize: 0,
+        maxSize: 1048576,
+        onDrop
+    });
 
     useEffect(() => {
         axios.get(`/content/playlist/${props.id}`, queryConfig(token))
@@ -72,11 +82,6 @@ const Playlist: React.FC = () => {
     if (!headerTitle)
         setHeaderTitle(title);
 
-    const dropData = useDropzone({
-        minSize: 0,
-        maxSize: 1048576
-    });
-
     return (
         <div>
             <Sidebar/>
@@ -89,7 +94,8 @@ const Playlist: React.FC = () => {
                         :
                         <form onSubmit={handleUpdatePlaylist}>
                         <FormControl>
-                            <Dropzone {...dropData}/>
+                            <CoverUpload {...dropData} filetype={"cover"} size={1} cover={paths}/>
+
                             <StyledTextField
                                 onChange={(e) => setId(e.target.value)}
                                 label="playlist id"

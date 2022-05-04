@@ -19,3 +19,13 @@ div.files {
     margin-top: 5px;
     text-decoration: none;
 }
+
+.cover{
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-left: 270px;
+    width: 150px;
+    height: 100%;
+    font-weight: lighter;
+}
+
