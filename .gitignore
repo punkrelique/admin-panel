@@ -352,3 +352,6 @@ MigrationBackup/
 # Idea ignore stuff
 .idea
 .idea/*
+
+# Ignore assets stuff
+./admin-api/assets
