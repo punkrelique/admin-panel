@@ -62,7 +62,7 @@ const CreatePlaylist = () => {
             <h1 className={styles.title}>New Playlist</h1>
             <div className={styles.form}>
                 <FormControl>
-                <Dropzone {...dropData}/>
+                <Dropzone text={"Click or drag the file to upload cover (1mb max)"} {...dropData}/>
                 <StyledTextField
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}

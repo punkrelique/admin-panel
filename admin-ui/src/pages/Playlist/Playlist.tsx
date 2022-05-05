@@ -13,10 +13,11 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import {useDropzone, FileWithPath} from "react-dropzone";
 import Dropzone from "../../components/Dropzone/Dropzone";
+import AddSong from "../../components/AddSong/AddSong";
 
 const Playlist: React.FC = () => {
     const [fetching, setFetching] = useState<boolean>(true);
-    const [updating, setUpdating] = useState<boolean>(false); // TODO: spinner)
+    const [updating, setUpdating] = useState<boolean>(false);
     const [id, setId] = useState<string | null>();
     const [title, setTitle] = useState<string | null>();
     const [userId, setUserId] = useState<string | null>();
@@ -24,9 +25,11 @@ const Playlist: React.FC = () => {
     const [headerTitle, setHeaderTitle] = useState<string | null | undefined>("Loading..");
     const props = useParams();
     const token = getToken();
+    const [isCreatingSong, setIsCreatingSong] = useState<boolean>(false);
+    const playlistId: number = parseInt(props.id!);
 
     useEffect(() => {
-        axios.get(`/content/playlist/${props.id}`, queryConfig(token))
+        axios.get(`/content/playlist/${playlistId}`, queryConfig(token))
             .then(res => {
                 setId(res.data[0]["id"]);
                 setTitle(res.data[0]["title"]);
@@ -89,7 +92,7 @@ const Playlist: React.FC = () => {
                         :
                         <form onSubmit={handleUpdatePlaylist}>
                         <FormControl>
-                            <Dropzone {...dropData}/>
+                            <Dropzone text={"Click or drag the file to upload cover (1mb max)"} {...dropData}/>
                             <StyledTextField
                                 onChange={(e) => setId(e.target.value)}
                                 label="playlist id"
@@ -170,12 +173,22 @@ const Playlist: React.FC = () => {
                 }
             </div>
             <hr/>
-            <div className={styles.tracks}>
-                <div className={styles.playlistSongsHeader}>
-                    <h1>Playlist Songs</h1>
-                    <button className={`${styles.info} ${styles.add}`}>ADD</button>
-                </div>
-            </div>
+            {
+                isCreatingSong ?
+                    <AddSong artistId={parseInt(userId!)} playlistId={playlistId} setIsCreatingSong={setIsCreatingSong}/>
+                    :
+                    <div className={styles.tracks}>
+                        <div className={styles.playlistSongsHeader}>
+                            <h1>Playlist Songs</h1>
+                            <button
+                                className={`${styles.info} ${styles.add}`}
+                                onClick={() => setIsCreatingSong(true)}
+                            >
+                                ADD NEW
+                            </button>
+                        </div>
+                    </div>
+            }
         </div>
     );
 };
