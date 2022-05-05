@@ -80,7 +80,7 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
                     :
                     <Form onSubmit={handleUpdateSong}>
                         <FormControl>
-                            <Dropzone text={"Click or drag the file to upload cover (5mb max)"} {...dropData}/>
+                            <Dropzone text={"Click or drag the file to upload song (5mb max)"} {...dropData}/>
                             <StyledTextField
                                 label="id"
                                 type="number"
