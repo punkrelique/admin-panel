@@ -95,22 +95,24 @@ class SongController {
         try {
             const multerReq = (req as MulterRequest)
             const filename = multerReq.file ? multerReq.file.filename : "";
-            const { title, name } = req.body
+            const { name, id } = req.body
             const source = uploadPathSongs + `/${filename}`
             let song;
             if (filename) {
                 song = await db.query(`
                 UPDATE song
-                SET title = ${title}, name = ${name}, source = ${source}
+                SET name = $1, source = $2
+                WHERE id = $3
                 RETURNING *
-            `)
+            `, [name, source, id])
             }
             else {
                 song = await db.query(`
-                UPDATE song
-                SET title = ${title}, name = ${name}
+                UPDATE song 
+                SET name = $1
+                WHERE id = $2
                 RETURNING *
-            `)
+            `, [name, id])
             }
             res.json(song.rows[0]);
         }

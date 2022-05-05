@@ -14,6 +14,7 @@ import InputLabel from '@mui/material/InputLabel';
 import {useDropzone, FileWithPath} from "react-dropzone";
 import Dropzone from "../../components/Dropzone/Dropzone";
 import AddSong from "../../components/AddSong/AddSong";
+import Song from "../../components/Song/Song";
 
 const Playlist: React.FC = () => {
     const [fetching, setFetching] = useState<boolean>(true);
@@ -26,7 +27,7 @@ const Playlist: React.FC = () => {
     const props = useParams();
     const token = getToken();
     const [isCreatingSong, setIsCreatingSong] = useState<boolean>(false);
-    const playlistId: number = parseInt(props.id!);
+    const playlistId = (props.id) ?? props.idP;
 
     useEffect(() => {
         axios.get(`/content/playlist/${playlistId}`, queryConfig(token))
@@ -174,8 +175,11 @@ const Playlist: React.FC = () => {
             </div>
             <hr/>
             {
+                props.idS && props.idP ?
+                    <Song id={props.idS} playlistId={props.idP}/>
+                    :
                 isCreatingSong ?
-                    <AddSong artistId={parseInt(userId!)} playlistId={playlistId} setIsCreatingSong={setIsCreatingSong}/>
+                    <AddSong artistId={parseInt(userId!)} playlistId={playlistId!} setIsCreatingSong={setIsCreatingSong}/>
                     :
                     <div className={styles.tracks}>
                         <div className={styles.playlistSongsHeader}>

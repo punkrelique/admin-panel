@@ -191,7 +191,7 @@ const Content = () => {
                     <>
                     <StyledTableCell sx={{width: 2}}>
                         <Link
-                            to={`/playlist/${song.playlist_id}`}
+                            to={`/playlist/${song.playlist_id}/song/${song.song_id}`}
                             style={{color: "grey", textDecoration: "none"}}
                         >
                             DETAILS

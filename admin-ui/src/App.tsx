@@ -35,6 +35,7 @@ function App() {
                     <Route path="/User/:id" element={<User/>}/>
                     <Route path="/CreatePlaylist" element={<CreatePlaylist/>}/>
                     <Route path="/Playlist/:id" element={<Playlist/>}/>
+                    <Route path="/Playlist/:idP/song/:idS" element={<Playlist/>}/>
                 </Route>
             </Routes>
         </div>
