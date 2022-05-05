@@ -75,23 +75,13 @@ class SongController {
             const filename = multerReq.file ? multerReq.file.filename : "";
             const { userId, name } = req.body
             const source = uploadPathSongs + `/${filename}`
-            let content;
-            if (content) {
-                content = await db.query(`
+            const content = await db.query(`
                 INSERT INTO song
                 (name, user_id, source)
                 VALUES ($1, $2, $3)
                 RETURNING *
             `, [name, userId, source])
-            }
-            else {
-                content = await db.query(`
-                INSERT INTO song
-                (name, user_id, source)
-                VALUES ($1, $2)
-                RETURNING *
-            `, [name, userId])
-            }
+
             res.json(content.rows[0]);
         }
         catch (e) {

@@ -5,7 +5,7 @@ import styles from "./Dropzone.module.css";
 
 
 const Dropzone = (props: any) => {
-    const {acceptedFiles, getRootProps, getInputProps} = props
+    const {acceptedFiles, getRootProps, getInputProps, text} = props
 
     const files = acceptedFiles.map((file: FileWithPath) => (
         <p key={file.path}>
@@ -17,7 +17,7 @@ const Dropzone = (props: any) => {
         <div>
             <div className={styles.drop} {...getRootProps()}>
                 <input {...getInputProps()} />
-                <p>Click or drag to upload cover (1mb max)</p>
+                <p>{text}</p>
             </div>
             <div className={styles.files}>
                 {files}

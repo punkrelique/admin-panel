@@ -9,6 +9,7 @@ import {grey, red} from "@mui/material/colors";
 import User from "./pages/User/User";
 import CreatePlaylist from "./pages/CreatePlaylist/CreatePlaylist";
 import Playlist from "./pages/Playlist/Playlist";
+import AddSong from "./components/AddSong/AddSong";
 
 const appTheme = createTheme({
     palette: {
