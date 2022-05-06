@@ -15,6 +15,7 @@ router.delete('/playlist/:idP/song/', playlistController.removeSongsFromPlaylist
 router.get('/playlist/title/:title', playlistController.getPlaylistsByTitle)
 
 router.get('/song', songController.getSongs)
+router.get('/song/:id/playlist/:idP', songController.getSongPlaylistID)
 router.get('/song/:id', songController.getSongByID)
 router.post('/song', songUpload, songController.addSong)
 router.put('/song', songUpload, songController.updateSong)
