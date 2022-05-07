@@ -7,12 +7,14 @@ const authRouter = require('./routes/auth.routes')
 const swaggerUi = require ('swagger-ui-express')
 const swaggerDoc = require ('./swagger/openapi.json')
 const morgan = require('morgan');
+const path = require('path')
 const PORT = 8080
 
 const app = express()
 app.use(express.json())
 app.use(cors())
 app.use(morgan('dev'));
+app.use('/api', express.static('assets'), authMiddleware)
 
 app.use('/api/user', authMiddleware, userRouter)
 app.use('/api/content', authMiddleware, contentRouter)

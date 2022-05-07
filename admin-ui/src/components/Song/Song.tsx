@@ -29,6 +29,10 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
     const token = getToken();
 
     useEffect(() => {
+        axios.get('/uploads/songs/john.mp3', queryConfig(token))
+            .then(console.log)
+            .catch(console.log)
+
         axios.get(`/content/song/${props.id}`, queryConfig(token))
             .then(res => {
                 setFetching(false);
@@ -83,6 +87,7 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
                     <Form onSubmit={handleUpdateSong}>
                         <FormControl>
                             <Dropzone text={"Click or drag the file to upload song (5mb max)"} {...dropData}/>
+
                             <StyledTextField
                                 label="id"
                                 type="number"
