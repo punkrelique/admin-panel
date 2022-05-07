@@ -171,6 +171,23 @@ class SongController {
             });
         }
     }
+
+    async getSongPlaylistID(req: Request, res: Response) {
+        try {
+            const id = req.params.id
+            const idP = req.params.idP
+            const playlistId = await db.query(`
+                SELECT *
+                FROM playlist_song
+                WHERE song_id = $1 AND playlist_id = $2`, [id, idP])
+            res.json(playlistId.rows)
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
+    }
 }
 
 module.exports = new SongController();

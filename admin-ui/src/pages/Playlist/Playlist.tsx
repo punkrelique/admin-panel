@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import {getToken, queryConfig, queryConfigMultipart} from "../../components/QueryConfig";
 import styled from "@emotion/styled";
@@ -29,8 +29,19 @@ const Playlist: React.FC = () => {
     const token = getToken();
     const [isCreatingSong, setIsCreatingSong] = useState<boolean>(false);
     const playlistId = (props.id) ?? props.idP;
+    const songId = props.idS;
+    const navigate = useNavigate();
 
     useEffect(() => {
+        if (songId){
+            axios.get(`/content/song/${songId}/playlist/${playlistId}`, queryConfig(token))
+                .then(res => {
+                    if (res.data.length === 0){
+                        navigate("/404", {replace: true});
+                    }
+                })
+                .catch(er => console.log(er))
+        }
         axios.get(`/content/playlist/${playlistId}`, queryConfig(token))
             .then(res => {
                 setId(res.data[0]["id"]);
