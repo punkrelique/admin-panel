@@ -26,6 +26,7 @@ button.info:hover {
 
 .tracks {
     margin-left: 270px;
+    display: block;
 }
 
 .tracks h1 {
@@ -50,4 +51,10 @@ div.playlistSongsHeader {
     width: 80px;
     margin-top: 20px;
     margin-bottom: 16px;
+}
+
+.playlistSongsList {
+    position: relative;
+    top: -70px;
+    left: -260px;
 }

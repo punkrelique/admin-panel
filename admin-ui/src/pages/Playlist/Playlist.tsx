@@ -11,10 +11,11 @@ import RedirectButton from "../../components/CustomButtons/RedirectButton";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
-import {useDropzone, FileWithPath} from "react-dropzone";
+import {useDropzone} from "react-dropzone";
 import Dropzone from "../../components/Dropzone/Dropzone";
 import AddSong from "../../components/AddSong/AddSong";
 import Song from "../../components/Song/Song";
+import PlaylistSongList from "../../components/PlaylistSongList";
 
 const Playlist: React.FC = () => {
     const [fetching, setFetching] = useState<boolean>(true);
@@ -60,10 +61,10 @@ const Playlist: React.FC = () => {
         if (dropData.acceptedFiles[0]) {
             form.append('cover', dropData.acceptedFiles![0])
             config = queryConfigMultipart(token);
-        };
+        }
 
         axios.put("/content/playlist", form, config)
-            .then(res => {
+            .then(() => {
                 setUpdating(false);
                 setHeaderTitle(title!);
             })
@@ -130,29 +131,30 @@ const Playlist: React.FC = () => {
                                 required
                             />
                             <FormControl>
-                            <InputLabel
-                                color="secondary"
-                                sx={{
-                                    marginLeft: "272px",
-                                    marginTop: "21px"
-                                }}
-
-                            >type</InputLabel>
-                            <Select
-                                value={type}
-                                sx={{
-                                    marginLeft: "270px",
-                                    marginTop: "20px"
-                                }}
-                                label="type"
-                                onChange={(e) => setType(e.target.value)}
-                                color="secondary"
-                                required
-                            >
-                                <MenuItem value={"album"}>Album</MenuItem>
-                                <MenuItem value={"single"}>Single</MenuItem>
-                                <MenuItem value={"ep"}>Ep</MenuItem>
-                            </Select>
+                                <InputLabel
+                                    color="secondary"
+                                    sx={{
+                                        marginLeft: "272px",
+                                        marginTop: "21px"
+                                    }}
+                                >
+                                    type
+                                </InputLabel>
+                                <Select
+                                    value={type}
+                                    sx={{
+                                        marginLeft: "270px",
+                                        marginTop: "20px"
+                                    }}
+                                    label="type"
+                                    onChange={(e) => setType(e.target.value)}
+                                    color="secondary"
+                                    required
+                                >
+                                    <MenuItem value={"album"}>Album</MenuItem>
+                                    <MenuItem value={"single"}>Single</MenuItem>
+                                    <MenuItem value={"ep"}>Ep</MenuItem>
+                                </Select>
                             </FormControl>
                             {
                                 updating ?
@@ -190,6 +192,9 @@ const Playlist: React.FC = () => {
                             >
                                 ADD NEW
                             </button>
+                        </div>
+                        <div className={styles.playlistSongsList}>
+                            <PlaylistSongList playlistId={playlistId!}/>
                         </div>
                     </div>
             }

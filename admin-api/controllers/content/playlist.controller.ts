@@ -147,13 +147,13 @@ class PlaylistController {
                 res.status(400).send({
                     message: "Limit query param is missing"
                 })
-
             const content = await db.query(`
-                SELECT a.id, a.name
+                SELECT a.id as song_id, a.name
                 FROM song as a
                 JOIN playlist_song as b on a.id = b.song_id
                 WHERE playlist_id = $1
-            `, [id])
+                OFFSET $2 LIMIT $3
+            `, [id, offset, limit])
             res.json(content.rows);
         }
         catch (e) {

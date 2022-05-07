@@ -71,7 +71,7 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
 
     return (
         <div>
-            <RedirectButton page={'content'} text={"BACK"}/> {/*TODO: back kuda?*/}
+            <RedirectButton page={`playlist/${props.playlistId}`} text={"BACK"}/> {/*TODO: back kuda?*/}
             <h1 className={styles.titleSong}>Song — "{headerSong ?? name}" </h1>
             <div className={styles.formUpdate}>
             {
