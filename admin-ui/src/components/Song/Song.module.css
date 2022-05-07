@@ -49,3 +49,11 @@ button.info:hover {
     margin-top: 20px;
     margin-bottom: 16px;
 }
+
+audio::-webkit-media-controls-panel {
+    background-color: white !important;
+}
+
+audio:hover {
+    border-color: gray !important;
+}

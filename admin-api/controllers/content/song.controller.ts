@@ -38,7 +38,7 @@ class SongController {
         try {
             const id = req.params.id
             const content = await db.query(`
-                SELECT id, name
+                SELECT id, name, source
                 FROM song
                 WHERE id = $1
             `, [id])

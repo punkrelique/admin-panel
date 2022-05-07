@@ -9,12 +9,14 @@ import Dropzone from "../Dropzone/Dropzone";
 import RedirectButton from "../CustomButtons/RedirectButton";
 import styles from './Song.module.css'
 import {Form} from "react-bootstrap";
+import ReactAudioPlayer from "react-audio-player";
 
 const Song: React.FC<{id: string, playlistId: string}> = (props) => {
     const [fetching, setFetching] = useState<boolean>(true);
     const [updating, setUpdating] = useState<boolean>(false);
     const [name, setName] = useState<string>("");
     const [id, setId] = useState<string>("");
+    const [source, setSource] = useState<string>("");
     const [headerSong, setHeaderSong] = useState<string | null | undefined>();
     const [error, setError] = useState<string>("");
     const dropData = useDropzone({
@@ -29,15 +31,12 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
     const token = getToken();
 
     useEffect(() => {
-        axios.get('/uploads/songs/john.mp3', queryConfig(token))
-            .then(console.log)
-            .catch(console.log)
-
         axios.get(`/content/song/${props.id}`, queryConfig(token))
             .then(res => {
                 setFetching(false);
                 setName(res.data[0]['name'])
                 setId(res.data[0]['id'])
+                setSource(res.data[0]['source'])
             })
             .catch(console.log)
     }, []);
@@ -87,7 +86,22 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
                     <Form onSubmit={handleUpdateSong}>
                         <FormControl>
                             <Dropzone text={"Click or drag the file to upload song (5mb max)"} {...dropData}/>
+                            <ReactAudioPlayer
+                                style={{
+                                    marginLeft: '270px',
+                                    marginTop: '5px',
+                                    position: 'relative',
+                                    top: '5px',
+                                    backgroundColor: 'white',
+                                    border: '1px solid #BBBDBD',
+                                    borderRadius: '5px',
+                                    width: '500px',
+                                    height: '60px',
 
+                                }}
+                                controls
+                                src={"http://localhost:8080/api/" + source}
+                            />
                             <StyledTextField
                                 label="id"
                                 type="number"

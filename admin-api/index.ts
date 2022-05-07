@@ -14,8 +14,8 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 app.use(morgan('dev'));
-app.use('/api', express.static('assets'), authMiddleware)
 
+app.use('/api/assets', express.static('assets'))
 app.use('/api/user', authMiddleware, userRouter)
 app.use('/api/content', authMiddleware, contentRouter)
 app.use('/api/auth', authRouter)
