@@ -198,7 +198,7 @@ class PlaylistController {
             const content = await db.query(`
                 SELECT id, title, type
                 FROM playlist
-                WHERE title ~* ('.*' || $1 || '.*')
+                WHERE title ~* ('.*' || $1 || '.*') AND type != 'user'
                 OFFSET $2 LIMIT $3`, [title, offset, limit])
             res.json(content.rows)
         }

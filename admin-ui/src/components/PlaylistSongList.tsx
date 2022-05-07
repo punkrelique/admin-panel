@@ -52,26 +52,14 @@ const PlaylistSongList: React.FC<{playlistId: string}> = (props) => {
     }
 
     const songDelete = (id: number, index: number) => {
-        if (type[0] === 'song'){
-            axios.delete('content/song/'
-                + `${id}`, queryConfig(token))
-                .then(() => {
-                    songs = [];
-                    offset = index;
-                    songSearch();
-                });
-        }
-        else {
-            axios.delete(`content/playlist/${id}/song/`, queryConfig(token))
-                .then(() => {
-                    axios.delete('content/song/'
-                        + `${id}`, queryConfig(token))
-                        .then(() => {
-                            offset = index;
-                            songSearch();
-                        });
-                });
-        }};
+        axios.delete('content/song/'
+            + `${id}`, queryConfig(token))
+            .then(() => {
+                songs = [];
+                offset = index;
+                songSearch();
+            });
+    }
 
     let renderSongs = songs?.map((song: song, index) => {
         return (
