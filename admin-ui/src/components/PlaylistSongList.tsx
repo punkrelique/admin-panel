@@ -141,7 +141,6 @@ const PlaylistSongList: React.FC<{playlistId: string}> = (props) => {
 
     return (
         <div>
-            <div style={{height: "70px"}}/>
             <Paper elevation={0} sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer sx={{ maxHeight: 550 }}>
                     <Table

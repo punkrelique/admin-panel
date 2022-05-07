@@ -21,14 +21,8 @@ button.info {
 }
 
 button.add {
-    padding: 15px;
-    width: 100px;
-    background-color: #e0e0e0;
-    border: none;
-}
+    position: relative;
 
-button.add:hover {
-    background-color: #bdbdbd;
 }
 
 button.info:hover {
@@ -72,6 +66,7 @@ div.playlistSongsHeader {
 
 .playlistSongsList {
     position: relative;
-    top: -70px;
+    top: -20px;
     left: -260px;
+    padding-bottom: 5px;
 }

@@ -198,7 +198,7 @@ const Playlist: React.FC = () => {
                         <div className={styles.playlistSongsHeader}>
                             <h1>Playlist Songs</h1>
                             <button
-                                className={`${styles.infoAddNew} ${styles.add}`}
+                                className={`${styles.info} ${styles.add}`}
                                 onClick={() => setIsCreatingSong(true)}
                             >
                                 ADD NEW
