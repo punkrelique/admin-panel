@@ -20,6 +20,17 @@ button.info {
     border: none;
 }
 
+button.add {
+    padding: 15px;
+    width: 100px;
+    background-color: #e0e0e0;
+    border: none;
+}
+
+button.add:hover {
+    background-color: #bdbdbd;
+}
+
 button.info:hover {
     background-color: #bdbdbd;
 }
@@ -34,6 +45,12 @@ button.info:hover {
 }
 
 button.update {
+    position: relative;
+    left: 255px;
+    margin: 15px 15px;
+}
+
+button.addNew {
     position: relative;
     left: 255px;
     margin: 15px 15px;
