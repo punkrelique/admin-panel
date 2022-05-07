@@ -95,22 +95,24 @@ class SongController {
         try {
             const multerReq = (req as MulterRequest)
             const filename = multerReq.file ? multerReq.file.filename : "";
-            const { title, name } = req.body
+            const { name, id } = req.body
             const source = uploadPathSongs + `/${filename}`
             let song;
             if (filename) {
                 song = await db.query(`
                 UPDATE song
-                SET title = ${title}, name = ${name}, source = ${source}
+                SET name = $1, source = $2
+                WHERE id = $3
                 RETURNING *
-            `)
+            `, [name, source, id])
             }
             else {
                 song = await db.query(`
-                UPDATE song
-                SET title = ${title}, name = ${name}
+                UPDATE song 
+                SET name = $1
+                WHERE id = $2
                 RETURNING *
-            `)
+            `, [name, id])
             }
             res.json(song.rows[0]);
         }
@@ -162,6 +164,23 @@ class SongController {
                 ON ps.playlist_id = p.id 
                 OFFSET $2 LIMIT $3`, [name, offset, limit])
             res.json(users.rows)
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
+    }
+
+    async getSongPlaylistID(req: Request, res: Response) {
+        try {
+            const id = req.params.id
+            const idP = req.params.idP
+            const playlistId = await db.query(`
+                SELECT *
+                FROM playlist_song
+                WHERE song_id = $1 AND playlist_id = $2`, [id, idP])
+            res.json(playlistId.rows)
         }
         catch (e) {
             res.status(400).send({

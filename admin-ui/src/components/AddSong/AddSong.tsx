@@ -12,7 +12,7 @@ import {useParams} from "react-router-dom";
 import {TailSpin} from "react-loading-icons";
 import {Form} from "react-bootstrap";
 
-const AddSong: React.FC<{playlistId: number, artistId: number, setIsCreatingSong: React.Dispatch<SetStateAction<boolean>>}> = (props) => {
+const AddSong: React.FC<{playlistId: string, artistId: number, setIsCreatingSong: React.Dispatch<SetStateAction<boolean>>}> = (props) => {
     const [updating, setUpdating] = React.useState<boolean>(false);
     const [name, setName] = React.useState<string | undefined>();
     const [error, setError] = React.useState<string>("");

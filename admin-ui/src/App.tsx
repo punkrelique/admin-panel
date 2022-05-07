@@ -9,7 +9,7 @@ import {grey, red} from "@mui/material/colors";
 import User from "./pages/User/User";
 import CreatePlaylist from "./pages/CreatePlaylist/CreatePlaylist";
 import Playlist from "./pages/Playlist/Playlist";
-import AddSong from "./components/AddSong/AddSong";
+import ErrorPage from "./pages/ErrorPage";
 
 const appTheme = createTheme({
     palette: {
@@ -30,11 +30,13 @@ function App() {
                 <Route path="/Login" element={<Login/>}/>
                 <Route element={<ProtectedRoutes/>}>
                     <Route path="/Users" element={<Home/>}/>
+                    <Route path="/404" element={<ErrorPage/>}/>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/Content" element={<Content/>}/>
                     <Route path="/User/:id" element={<User/>}/>
                     <Route path="/CreatePlaylist" element={<CreatePlaylist/>}/>
                     <Route path="/Playlist/:id" element={<Playlist/>}/>
+                    <Route path="/Playlist/:idP/song/:idS" element={<Playlist/>}/>
                 </Route>
             </Routes>
         </div>

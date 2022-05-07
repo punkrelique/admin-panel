@@ -20,12 +20,18 @@ button.info {
     border: none;
 }
 
+button.add {
+    position: relative;
+
+}
+
 button.info:hover {
     background-color: #bdbdbd;
 }
 
 .tracks {
     margin-left: 270px;
+    display: block;
 }
 
 .tracks h1 {
@@ -33,6 +39,12 @@ button.info:hover {
 }
 
 button.update {
+    position: relative;
+    left: 255px;
+    margin: 15px 15px;
+}
+
+button.addNew {
     position: relative;
     left: 255px;
     margin: 15px 15px;
@@ -50,4 +62,11 @@ div.playlistSongsHeader {
     width: 80px;
     margin-top: 20px;
     margin-bottom: 16px;
+}
+
+.playlistSongsList {
+    position: relative;
+    top: -20px;
+    left: -260px;
+    padding-bottom: 5px;
 }
