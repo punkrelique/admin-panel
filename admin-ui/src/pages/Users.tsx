@@ -17,6 +17,7 @@ import {KeyboardDoubleArrowDown} from "@mui/icons-material";
 import { TailSpin } from 'react-loading-icons';
 import {styled} from "@mui/material/styles";
 import {getToken, queryConfig} from "../components/QueryConfig";
+import Typography from "@mui/material/Typography";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -51,10 +52,12 @@ const Users = () => {
     const [users, setUsers] = React.useState<user[]>([]);
     const [fetching, setFetching] = React.useState(true);
     const [received, setReceived] = React.useState(true);
+    const [clear, setClear] = React.useState(true);
     let token = getToken();
 
     useEffect(() => {
         setUsers([]);
+        setClear(true);
         setOffset(0);
         setReceived(true)
     }, [input[0], type[0]]);
@@ -63,22 +66,18 @@ const Users = () => {
         setFetching(true);
         setTimeout(()=>{
         if (type[0] === 'id'){
-        axios.get('user/id/' + input[0], queryConfig(token))
-        .then((res) => {
-            if(res.data.length === 0){
-                setUsers([{email: "< nothing found >", id: 0}])
-            }
-            else{
+            axios.get('user/id/' + input[0], queryConfig(token))
+            .then((res) => {
+                setClear(false);
                 setUsers([res.data]);
-            }
-            setFetching(false);
-            setReceived(false)
-        })
-        .catch((error) => {
-            if (error.response.status === 403) {
-                /*logout*/
-            }
-        });
+                setFetching(false);
+                setReceived(false)
+            })
+            .catch((error) => {
+                if (error.response.status === 403) {
+                    /*logout*/
+                }
+            });
         }
         else {
             axios.get('user/email/'
@@ -87,12 +86,13 @@ const Users = () => {
                 + '&limit=15'
                 + '&userType=' + type[0], queryConfig(token))
                 .then((res) => {
+                    setClear(false);
                     setUsers([...users, ...res.data]);
                     setOffset(offset + 15);
                     setFetching(false);
                     if (res.data.length === 0) {
                         setReceived(false)
-                        setUsers([...users, {email: "< nothing found >", id: 0}])
+                        setUsers(users)
                     }
                 })
                 .catch((error) => {
@@ -184,6 +184,7 @@ const Users = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                {users.length === 0 && !clear? <Typography sx={{marginLeft: 40, fontSize: 30}}>Nothing found</Typography> :''}
             </Paper>
         </div>
     );

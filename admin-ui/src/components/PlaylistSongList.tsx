@@ -109,7 +109,7 @@ const PlaylistSongList: React.FC<{playlistId: string}> = (props) => {
                     setFetching(false);
                     if(res.data.length === 0){
                         setReceived(false);
-                        setSongs([...songs, {name: "< nothing found >", song_id: 0}]);
+                        setSongs(songs);
                     }
                 })
                 .catch((error) => {

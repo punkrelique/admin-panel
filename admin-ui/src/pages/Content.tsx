@@ -18,6 +18,7 @@ import {KeyboardDoubleArrowDown} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
 import {getToken, queryConfig} from "../components/QueryConfig";
 import playlist from "./Playlist/Playlist";
+import Typography from "@mui/material/Typography";
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -62,12 +63,14 @@ const Content = () => {
     let [songs, setSongs] = React.useState<song[]>([]);
     const [fetching, setFetching] = React.useState(true);
     const [received, setReceived] = React.useState(true);
+    const [clear, setClear] = React.useState(true);
     let token = getToken();
 
     useEffect(() => {
         setPlaylists([]);
         setSongs([]);
         setOffset(0);
+        setClear(true);
         setReceived(true)
     }, [input[0], type[0]]);
 
@@ -81,10 +84,10 @@ const Content = () => {
                 .then((res) =>{
                     setPlaylists([...playlists, ...res.data]);
                     setOffset(offset+15);
+                    setClear(false)
                     setFetching(false);
                     if(res.data.length === 0){
-                        setReceived(false)
-                        setPlaylists([...playlists, {title: "< nothing found >", id: 0, type: "none"}]);
+                        setReceived(false);
                     }
                 })
                 .catch((error) => {
@@ -102,11 +105,11 @@ const Content = () => {
                 + '&limit=15', queryConfig(token))
                 .then((res) =>{
                     setSongs([...songs, ...res.data]);
+                    setClear(false);
                     setOffset(offset+15);
                     setFetching(false);
                     if(res.data.length === 0){
                         setReceived(false);
-                        setSongs([...songs, {name: "< nothing found >", song_id: 0, playlist_id: 0}]);
                     }
                 })
                 .catch((error) => {
@@ -243,14 +246,14 @@ const Content = () => {
             />
             <div style={{height: "70px"}}/>
             <Paper elevation={0} sx={{ width: '100%', overflow: 'hidden' }}>
-                <TableContainer sx={{ maxHeight: 550 }}>
+                <TableContainer sx={{maxHeight: 550}}>
                     <Table
-                        sx={{ minWidth: 550, maxWidth: "calc(50% - 250px)", marginLeft: "250px" }}
+                        sx={{minWidth: 550, maxWidth: "calc(50% - 250px)", marginLeft: "250px"}}
                         size="small"
                         stickyHeader
                     >
                         <TableHead>
-                            <TableRow >
+                            <TableRow>
                                 <TableCell>№</TableCell>
                                 <TableCell>ID</TableCell>
                                 <TableCell>Title</TableCell>
@@ -259,15 +262,17 @@ const Content = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            { renderList}
+                            {renderList}
                             <TableRow>
-                                <TableCell colSpan={5} >
+                                <TableCell colSpan={5}>
                                     {loadMore}
                                 </TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
+                {songs.length === 0 && !clear && type[0] === 'song'? <Typography sx={{marginLeft: 40, fontSize: 30}}>Nothing found</Typography> : ''}
+                {playlists.length === 0 && !clear && type[0] === 'playlist'? <Typography sx={{marginLeft: 40, fontSize: 30}}>Nothing found</Typography> : ''}
             </Paper>
         </div>
     );
