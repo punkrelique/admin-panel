@@ -1,4 +1,4 @@
-import React, {SetStateAction, useEffect, useState} from 'react';
+import React, {SetStateAction, useCallback, useEffect, useState} from 'react';
 import styled from "@emotion/styled";
 import {FormControl, TextField} from "@mui/material";
 import axios from "axios";
@@ -19,9 +19,15 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
     const [source, setSource] = useState<string>("");
     const [headerSong, setHeaderSong] = useState<string | null | undefined>();
     const [error, setError] = useState<string>("");
+    const reader = new FileReader();
+    const [path, setPath] = useState<string>();
+    const onDrop = useCallback(acceptedFiles => {
+        setPath(URL.createObjectURL(acceptedFiles[0]));
+    }, [setPath]);
     const dropData = useDropzone({
         minSize: 0,
-        maxSize: 1048576*5
+        maxSize: 1048576*5,
+        onDrop
     });
     const StyledTextField = styled(TextField)`
       width: 500px;
@@ -29,6 +35,17 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
       margin-top: 20px;
     `
     const token = getToken();
+
+    function getBase64(file: any) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log(reader.result);
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
 
     useEffect(() => {
         axios.get(`/content/song/${props.id}`, queryConfig(token))
@@ -85,6 +102,27 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
                     :
                     <Form onSubmit={handleUpdateSong}>
                         <FormControl>
+                            {
+                                path ?
+                                    <audio
+                                        style={{
+                                            marginLeft: '270px',
+                                            marginTop: '5px',
+                                            position: 'relative',
+                                            top: '5px',
+                                            backgroundColor: 'white',
+                                            border: '1px solid #BBBDBD',
+                                            borderRadius: '5px',
+                                            width: '500px',
+                                            height: '60px',
+
+                                        }}
+                                        controls
+                                        src={path}
+                                    />
+                                    :
+                                    ""
+                            }
                             <Dropzone text={"Click or drag the file to upload song (5mb max)"} {...dropData}/>
                             <ReactAudioPlayer
                                 style={{
