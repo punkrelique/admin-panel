@@ -22,6 +22,7 @@ const Playlist: React.FC = () => {
     const [userId, setUserId] = useState<string | null>();
     const [type, setType] = useState<string | null>();
     const [paths, setPaths] = useState([]);
+    let [source, setSource] = useState('');
     const [headerTitle, setHeaderTitle] = useState<string | null | undefined>("Loading..");
     const props = useParams();
     const token = getToken();
@@ -44,6 +45,7 @@ const Playlist: React.FC = () => {
                 setType(res.data[0]["type"]);
                 setHeaderTitle(title!);
                 setFetching(false);
+                setSource(res.data[0]["img_src"]);
             })
             .catch(console.log)
     }, []);
@@ -94,6 +96,10 @@ const Playlist: React.FC = () => {
                         :
                         <form onSubmit={handleUpdatePlaylist}>
                         <FormControl>
+
+                            {
+                                paths[0] === undefined?<img className={styles.cover} src={"http://localhost:8080/api/" + source}/>:''
+                            }
                             <CoverUpload {...dropData} filetype={"cover"} size={1} cover={paths}/>
 
                             <StyledTextField
