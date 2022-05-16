@@ -38,7 +38,7 @@ class SongController {
         try {
             const id = req.params.id
             const content = await db.query(`
-                SELECT id, name
+                SELECT id, name, source
                 FROM song
                 WHERE id = $1
             `, [id])
@@ -75,23 +75,13 @@ class SongController {
             const filename = multerReq.file ? multerReq.file.filename : "";
             const { userId, name } = req.body
             const source = uploadPathSongs + `/${filename}`
-            let content;
-            if (content) {
-                content = await db.query(`
+            const content = await db.query(`
                 INSERT INTO song
                 (name, user_id, source)
                 VALUES ($1, $2, $3)
                 RETURNING *
             `, [name, userId, source])
-            }
-            else {
-                content = await db.query(`
-                INSERT INTO song
-                (name, user_id, source)
-                VALUES ($1, $2)
-                RETURNING *
-            `, [name, userId])
-            }
+
             res.json(content.rows[0]);
         }
         catch (e) {
@@ -105,22 +95,24 @@ class SongController {
         try {
             const multerReq = (req as MulterRequest)
             const filename = multerReq.file ? multerReq.file.filename : "";
-            const { title, name } = req.body
+            const { name, id } = req.body
             const source = uploadPathSongs + `/${filename}`
             let song;
             if (filename) {
                 song = await db.query(`
                 UPDATE song
-                SET title = ${title}, name = ${name}, source = ${source}
+                SET name = $1, source = $2
+                WHERE id = $3
                 RETURNING *
-            `)
+            `, [name, source, id])
             }
             else {
                 song = await db.query(`
-                UPDATE song
-                SET title = ${title}, name = ${name}
+                UPDATE song 
+                SET name = $1
+                WHERE id = $2
                 RETURNING *
-            `)
+            `, [name, id])
             }
             res.json(song.rows[0]);
         }
@@ -172,6 +164,23 @@ class SongController {
                 ON ps.playlist_id = p.id 
                 OFFSET $2 LIMIT $3`, [name, offset, limit])
             res.json(users.rows)
+        }
+        catch (e) {
+            res.status(400).send({
+                message: e.message
+            });
+        }
+    }
+
+    async getSongPlaylistID(req: Request, res: Response) {
+        try {
+            const id = req.params.id
+            const idP = req.params.idP
+            const playlistId = await db.query(`
+                SELECT *
+                FROM playlist_song
+                WHERE song_id = $1 AND playlist_id = $2`, [id, idP])
+            res.json(playlistId.rows)
         }
         catch (e) {
             res.status(400).send({

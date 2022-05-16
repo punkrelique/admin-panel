@@ -72,7 +72,9 @@ const CreatePlaylist = () => {
             <h1 className={styles.title}>New Playlist</h1>
             <div className={styles.form}>
                 <FormControl>
+
                 <CoverUpload {...dropData} filetype={"cover"} size={1} cover={paths}/>
+
                 <StyledTextField
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
