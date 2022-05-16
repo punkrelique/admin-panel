@@ -65,3 +65,11 @@ div.playlistSongsHeader {
     margin-top: 20px;
     margin-bottom: 16px;
 }
+
+.cover{
+    margin-left: 350px;
+    border-radius: 0;
+    width: 150px;
+    height: 100%;
+    font-weight: lighter;
+}

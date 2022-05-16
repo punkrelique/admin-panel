@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {FormControl, InputLabel, MenuItem, TextField} from "@mui/material";
 import styled from "@emotion/styled";
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -13,6 +13,7 @@ import {getToken, queryConfig, queryConfigMultipart} from "../../components/Quer
 import RedirectButton from "../../components/CustomButtons/RedirectButton";
 import SimpleButton from "../../components/CustomButtons/SimpleButton";
 import {TailSpin} from "react-loading-icons";
+import CoverUpload from "../../components/Dropzone/CoverUpload";
 
 const StyledTextField = styled(TextField)`
       width: 500px;
@@ -24,13 +25,22 @@ const CreatePlaylist = () => {
     const [id, setId] = useState('');
     const [title, setTitle] = useState('');
     const [type, setType] = useState('');
+    const [paths, setPaths] = useState([]);
     const [uploading, setUploading] = useState<boolean>(false);
+
     const navigate = useNavigate();
+    const token = getToken();
+
+    const onDrop = useCallback(acceptedFiles => {
+        setPaths(acceptedFiles.map((file: any) => URL.createObjectURL(file)));
+    }, [setPaths]);
     const dropData = useDropzone({
         minSize: 0,
-        maxSize: 1048576
+        maxSize: 1048576,
+        onDrop
     });
-    const token = getToken();
+
+
 
     const createPlaylist =  () => {
         setUploading(true);
@@ -62,7 +72,9 @@ const CreatePlaylist = () => {
             <h1 className={styles.title}>New Playlist</h1>
             <div className={styles.form}>
                 <FormControl>
-                <Dropzone text={"Click or drag the file to upload cover (1mb max)"} {...dropData}/>
+
+                <CoverUpload {...dropData} filetype={"cover"} size={1} cover={paths}/>
+
                 <StyledTextField
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}

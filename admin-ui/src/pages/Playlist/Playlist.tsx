@@ -1,5 +1,8 @@
-import React, {useEffect, useState} from 'react';
+
+import React, {useCallback, useEffect, useState} from 'react';
+
 import {useNavigate, useParams} from "react-router-dom";
+
 import axios from "axios";
 import {getToken, queryConfig, queryConfigMultipart} from "../../components/QueryConfig";
 import styled from "@emotion/styled";
@@ -11,11 +14,15 @@ import RedirectButton from "../../components/CustomButtons/RedirectButton";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
-import {useDropzone} from "react-dropzone";
+
+import {useDropzone, FileWithPath} from "react-dropzone";
+import CoverUpload from "../../components/Dropzone/CoverUpload";
+
 import Dropzone from "../../components/Dropzone/Dropzone";
 import AddSong from "../../components/AddSong/AddSong";
 import Song from "../../components/Song/Song";
 import PlaylistSongList from "../../components/PlaylistSongList";
+
 
 const Playlist: React.FC = () => {
     const [fetching, setFetching] = useState<boolean>(true);
@@ -24,6 +31,8 @@ const Playlist: React.FC = () => {
     const [title, setTitle] = useState<string | null>();
     const [userId, setUserId] = useState<string | null>();
     const [type, setType] = useState<string | null>();
+    const [paths, setPaths] = useState([]);
+    let [source, setSource] = useState('');
     const [headerTitle, setHeaderTitle] = useState<string | null | undefined>("Loading..");
     const props = useParams();
     const token = getToken();
@@ -31,6 +40,15 @@ const Playlist: React.FC = () => {
     const playlistId = (props.id) ?? props.idP;
     const songId = props.idS;
     const navigate = useNavigate();
+
+    const onDrop = useCallback(acceptedFiles => {
+        setPaths(acceptedFiles.map((file: any) => URL.createObjectURL(file)));
+    }, [setPaths]);
+    const dropData = useDropzone({
+        minSize: 0,
+        maxSize: 1048576,
+        onDrop
+    });
 
     useEffect(() => {
         if (songId){
@@ -50,6 +68,7 @@ const Playlist: React.FC = () => {
                 setType(res.data[0]["type"]);
                 setHeaderTitle(title!);
                 setFetching(false);
+                setSource(res.data[0]["img_src"]);
             })
             .catch(console.log)
     }, []);
@@ -88,11 +107,6 @@ const Playlist: React.FC = () => {
     if (!headerTitle)
         setHeaderTitle(title);
 
-    const dropData = useDropzone({
-        minSize: 0,
-        maxSize: 1048576
-    });
-
     return (
         <div>
             <Sidebar/>
@@ -105,7 +119,14 @@ const Playlist: React.FC = () => {
                         :
                         <form onSubmit={handleUpdatePlaylist}>
                         <FormControl>
-                            <Dropzone text={"Click or drag the file to upload cover (1mb max)"} {...dropData}/>
+
+
+                            {
+                                paths[0] === undefined?<img className={styles.cover} src={"http://localhost:8080/api/" + source}/>:''
+                            }
+                            <CoverUpload {...dropData} filetype={"cover"} size={1} cover={paths}/>
+
+
                             <StyledTextField
                                 onChange={(e) => setId(e.target.value)}
                                 label="playlist id"
