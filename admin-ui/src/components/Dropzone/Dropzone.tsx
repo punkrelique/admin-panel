@@ -10,9 +10,9 @@ const Dropzone = (props: any) => {
 
 
     const files = acceptedFiles.map((file: FileWithPath) => (
-        <p key={file.path} style={{overflow: "hidden", whiteSpace: "nowrap", margin: "10px"}}>
+        <span key={file.path} style={{overflow: "hidden", whiteSpace: "nowrap", margin: "10px"}}>
             <b>({ Math.ceil(file.size/1000000 * Math.pow(10, 2)) / Math.pow(10, 2)} mb)</b> {file.path}
-        </p>
+        </span>
     ));
 
     return (
@@ -23,8 +23,7 @@ const Dropzone = (props: any) => {
                 {
                     acceptedFiles.length === 0?
                         <p>Click or drag to upload {filetype} ({size}mb max)</p>
-                        :
-                        <p>{files}</p>
+                        :<p>{files}</p>
                 }
             </div>
         </div>

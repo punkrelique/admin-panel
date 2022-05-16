@@ -62,7 +62,7 @@ class PlaylistController {
                 playlist = await db.query(`
                     UPDATE playlist
                     SET title = $1, type = $2, img_src = $3, user_id = $4
-                    WHERE id = $4
+                    WHERE id = $5
                     RETURNING *
                 `, [title, type, source, user_id, id])
             }
