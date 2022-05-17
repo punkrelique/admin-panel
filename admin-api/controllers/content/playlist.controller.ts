@@ -104,11 +104,12 @@ class PlaylistController {
     async addPlaylist(req: Request, res: Response) {
         try {
             const multerReq = (req as MulterRequest)
-            const filename = multerReq.file ? multerReq.file.filename : "";
-            const { title, type, user_id } = req.body
+            const filename = multerReq.file ? multerReq.file.filename : "empty";
+            const { title, type, user_id, img_src } = req.body
             const source = uploadPathCovers + `/${filename}`
+            const defaultSrc = uploadPathCovers + '/default.png'
             let content;
-            if (filename){
+            if (filename != "empty"){
                 content = await db.query(`
                 INSERT INTO playlist
                 (title, user_id, type, img_src)
@@ -119,10 +120,10 @@ class PlaylistController {
             else {
                 content = await db.query(`
                 INSERT INTO playlist
-                (title, user_id, type)
-                VALUES ($1, $2, $3)
+                (title, user_id, type, img_src)
+                VALUES ($1, $2, $3, $4)
                 RETURNING *
-            `, [title, user_id, type])
+            `, [title, user_id, type, defaultSrc])
             }
             res.json(content.rows)
         }
