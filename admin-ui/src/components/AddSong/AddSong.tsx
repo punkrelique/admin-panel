@@ -76,7 +76,7 @@ const AddSong: React.FC<{playlistId: string, artistId: number, setIsCreatingSong
             <div className={styles.formAdd}>
                 <Form onSubmit={handleAddSong}>
                     <FormControl>
-                        <Dropzone text={"Click or drag the file to upload song (5mb max)"} {...dropData}/>
+                        <Dropzone filetype={"song"} size={"5"} {...dropData}/>
                         <StyledTextField
                             onBlur={(e) => setName(e.target.value)}
                             onChange={() => setError("")}
@@ -91,6 +91,7 @@ const AddSong: React.FC<{playlistId: string, artistId: number, setIsCreatingSong
                             defaultValue={name}
                             required
                         />
+                        <b style={{color:'red', marginLeft: '270px'}}>{error}</b>
                         {
                             updating ?
                                 <TailSpin
@@ -106,7 +107,6 @@ const AddSong: React.FC<{playlistId: string, artistId: number, setIsCreatingSong
 
                         }
                     </FormControl>
-                    <b style={{color:'red', marginLeft: '270px'}}>{error}</b>
                 </Form>
             </div>
         </div>

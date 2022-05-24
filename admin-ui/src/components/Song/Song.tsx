@@ -123,7 +123,7 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
                                     :
                                     ""
                             }
-                            <Dropzone text={"Click or drag the file to upload song (5mb max)"} {...dropData}/>
+                            <Dropzone filetype={"song"} size={"5"} {...dropData}/>
                             <ReactAudioPlayer
                                 style={{
                                     marginLeft: '270px',
@@ -160,6 +160,7 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
                                 color="secondary"
                                 defaultValue={name}
                             />
+                            <b style={{color:'red', marginLeft: '270px'}}>{error}</b>
                             {
                                 updating ?
                                     <TailSpin
@@ -173,7 +174,6 @@ const Song: React.FC<{id: string, playlistId: string}> = (props) => {
                                         UPDATE
                                     </button>
                             }
-                            <b style={{color:'red', marginLeft: '270px'}}>{error}</b>
                         </FormControl>
                     </Form>
             }
