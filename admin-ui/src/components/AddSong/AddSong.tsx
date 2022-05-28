@@ -29,6 +29,16 @@ const AddSong: React.FC<{playlistId: string, artistId: number, setIsCreatingSong
         const form: any = new FormData();
         form.append('name', name!);
         form.append('userId', props.artistId);
+        if (name!.length > 255) {
+            setError("The name's length is too long (max is 255 symbols)")
+            setUpdating(false);
+            return;
+        }
+        if (!dropData.acceptedFiles[0]){
+            setError("You must load mp3 file to add song");
+            setUpdating(false);
+            return;
+        }
         form.append('song', dropData.acceptedFiles![0])
         let nameFile = dropData.acceptedFiles[0].name.split('.');
         if (nameFile[nameFile.length-1]!=="mp3"){
